@@ -1,0 +1,18 @@
+.default {
+  width: 2rem;
+  aspect-ratio: 1;
+  border: 8px solid grey;
+  border-top-color: black;
+  border-radius: 50%;
+  animation: spinner 1s ease-in-out infinite;
+}
+
+@keyframes spinner {
+  0% {
+    rotate: 0deg;
+  }
+
+  100% {
+    rotate: 360deg;
+  }
+}

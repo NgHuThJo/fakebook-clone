@@ -1,0 +1,116 @@
+.container {
+  display: grid;
+  place-content: center;
+  gap: 2rem;
+  text-align: center;
+
+  a {
+    text-decoration: none;
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    text-align: left;
+  }
+}
+
+.logo {
+  font-size: 3.5rem;
+  color: hsl(var(--c-brand));
+
+  + p {
+    margin-top: 0.25em;
+    font-size: 1.5rem;
+  }
+}
+
+.form-container {
+  --p-form: 1rem;
+  --bd-rd-form: 0.5rem;
+
+  padding: var(--p-form);
+  border-radius: var(--bd-rd-form);
+  color: hsl(220, 6%, 59%);
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+
+  > :not(:first-child) {
+    margin-top: 1em;
+  }
+
+  a {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  button {
+    font-size: 1.25rem;
+    background-color: hsl(var(--c-brand));
+  }
+
+  form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  input {
+    padding: var(--p-form);
+    border: 1px solid hsl(216, 8%, 88%);
+    outline: none;
+    font-size: 1.0625rem;
+    caret-color: hsl(var(--c-brand));
+  }
+
+  button,
+  input,
+  > a:last-of-type {
+    border-radius: var(--bd-rd-form);
+  }
+
+  button,
+  > a:last-of-type {
+    padding: var(--p-form);
+    font-weight: var(--fw-button);
+    color: white;
+    transition: opacity 0.25s;
+  }
+
+  button:hover,
+  > a:last-of-type:hover {
+    opacity: 0.75;
+  }
+
+  input:focus {
+    border-color: hsl(var(--c-brand));
+  }
+
+  > a:first-of-type {
+    color: hsl(var(--c-brand));
+  }
+
+  > a:last-of-type {
+    font-size: 1.0625rem;
+    background-color: hsl(110, 63%, 44%);
+  }
+
+  ~ p {
+    margin-top: 1.75rem;
+    text-align: center;
+    color: hsl(216, 8%, 12%);
+  }
+
+  ~ p > a {
+    font-weight: var(--fw-button);
+  }
+
+  > a:first-of-type:hover,
+  ~ p > a:hover {
+    text-decoration: revert;
+  }
+}
+
+.divider {
+  border-bottom: 1px solid hsl(214, 10%, 87%);
+}

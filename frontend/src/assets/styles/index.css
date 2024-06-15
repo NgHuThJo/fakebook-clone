@@ -1,0 +1,114 @@
+/* Custom properties */
+:root {
+  /* Box model */
+  --max-w-breakout: 90rem;
+  --max-w-content: 70rem;
+  --max-w-container: var(--max-w-content);
+  --max-w-nav: var(--max-w-breakout);
+  --max-h-nav: calc(100svh - 2 * var(--p-inline-container));
+  --min-w-root: 20rem;
+  --w-icon: 2rem;
+  --p-inline-container: 3rem;
+  --flow-spacing: 1em;
+
+  /* Grid */
+  --macro-grid-gap: 2rem;
+  --auto-grid-column-w: 15rem;
+
+  --macro-grid-breakout-max-w: var(--max-w-breakout);
+  --macro-grid-content-max-w: var(--max-w-content);
+  --macro-grid-breakout-column-w: calc(
+    (var(--macro-grid-breakout-max-w) - var(--macro-grid-content-max-w)) / 2
+  );
+  --macro-grid-p-inline: var(--p-inline-container);
+
+  /* Typography */
+  --ff-root: system-ui, sans-serif;
+
+  --fw-root: 400;
+  --fw-heading: 700;
+  --fw-button: 700;
+
+  --fs-root: 0.9375rem;
+  --fs-label: 0.8125rem;
+  --fs-h1: 3rem;
+  --fs-h2: 2rem;
+  --fs-h3: 1.5rem;
+  --fs-h4: 1.125rem;
+
+  /* Colors */
+  --c-root: 0 0% 95%;
+  --c-element: 0 97% 63%;
+  --c-underline: 223 23% 46%;
+  --c-brand: 217 100% 52%;
+
+  --bgc-root: 223 30% 9%;
+  --bgc-nav: 223 36% 14%;
+  --bgc-icon: 223 23% 46%;
+  --bgc-icon-hover: brightness(0) saturate(100%) invert(37%) sepia(51%)
+    saturate(3055%) hue-rotate(335deg) brightness(101%) contrast(98%);
+
+  /* Transition */
+  --transition-duration: 0.5s;
+}
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+}
+
+html {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+body {
+  flex-grow: 1;
+}
+
+a,
+button,
+input {
+  cursor: pointer;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--fw-heading);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+/* Root styles */
+#root {
+  min-width: var(--min-w-root);
+  min-height: 100svh;
+  font-family: var(--ff-root);
+  font-weight: var(--fw-root);
+  font-size: var(--fs-root);
+  color: hsl(var(--c-root));
+  background-color: hsl(var(--bgc-root));
+}

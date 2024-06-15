@@ -1,0 +1,28 @@
+.default {
+  position: relative;
+
+  > button[data-dropdown-toggle] {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 3rem;
+    border-radius: var(--bd-rd-element);
+    background-color: hsl(var(--bgc-element));
+
+    > img {
+      width: 1rem;
+      transition: transform var(--transition-duration);
+    }
+  }
+
+  > div[data-dropdown-list] {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border-radius: var(--bd-rd-element);
+    position: absolute;
+    background-color: hsl(var(--bgc-element));
+  }
+}

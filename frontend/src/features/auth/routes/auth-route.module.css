@@ -1,0 +1,23 @@
+.container {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-height: 100svh;
+}
+
+.main > *,
+.footer > * {
+  max-width: min(var(--max-w-container), 100% - 2 * var(--p-inline-container));
+  margin-inline: auto;
+}
+
+.main {
+  display: grid;
+  color: hsl(216, 8%, 12%);
+  background-color: hsl(216, 20%, 95%);
+}
+
+.footer {
+  padding-block: 3rem;
+  color: hsl(0, 0%, 45%);
+  background-color: white;
+}

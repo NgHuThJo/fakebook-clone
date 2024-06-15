@@ -1,0 +1,7 @@
+.default {
+  display: grid;
+  justify-items: center;
+  place-content: center;
+  gap: 2rem;
+  height: 100svh;
+}
