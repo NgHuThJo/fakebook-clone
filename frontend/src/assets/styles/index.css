@@ -45,8 +45,8 @@
   --bgc-root: 223 30% 9%;
   --bgc-nav: 223 36% 14%;
   --bgc-icon: 223 23% 46%;
-  --bgc-icon-hover: brightness(0) saturate(100%) invert(37%) sepia(51%)
-    saturate(3055%) hue-rotate(335deg) brightness(101%) contrast(98%);
+  --bgc-icon-hover: brightness(0) saturate(100%) invert(24%) sepia(81%)
+    saturate(2887%) hue-rotate(212deg) brightness(103%) contrast(98%);
 
   /* Transition */
   --transition-duration: 0.5s;

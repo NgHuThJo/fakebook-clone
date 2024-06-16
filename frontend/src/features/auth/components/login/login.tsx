@@ -8,7 +8,7 @@ import styles from "./login.module.css";
 export const loginAction =
   (apiClient: ApiClient) =>
   async ({ request, params }: ActionFunctionArgs) => {
-    console.log("inside login action");
+    throw Error("Error inside login action");
 
     return new Response();
   };

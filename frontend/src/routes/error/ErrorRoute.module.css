@@ -4,4 +4,9 @@
   place-content: center;
   gap: 2rem;
   height: 100svh;
+
+  > p {
+    color: red;
+    font-size: 1.5rem;
+  }
 }

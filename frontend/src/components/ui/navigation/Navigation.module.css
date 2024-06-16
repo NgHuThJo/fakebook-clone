@@ -41,3 +41,22 @@
     }
   }
 }
+
+.facebook {
+  display: flex;
+  padding: 0.5rem;
+  background-color: white;
+
+  > div {
+    display: flex;
+    gap: 1rem;
+  }
+
+  > div:not(:first-child) a:hover {
+    filter: var(--bgc-icon-hover);
+  }
+
+  > div[data-center] {
+    margin-inline: auto;
+  }
+}

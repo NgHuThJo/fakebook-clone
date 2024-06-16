@@ -1,4 +1,9 @@
 import { ChangeEvent, useState } from "react";
+import { Link } from "react-router-dom";
+import { Image } from "@/components/ui/image";
+import { Navigation } from "@/components/ui/navigation";
+import { SearchBar } from "@/components/ui/searchbar";
+// Assets
 import {
   add_icon,
   exit_icon,
@@ -9,9 +14,6 @@ import {
   storefront_icon,
   subscription_icon,
 } from "@/assets/images/icons";
-import { Image } from "@/components/ui/image";
-import { Navigation } from "@/components/ui/navigation";
-import { SearchBar } from "@/components/ui/searchbar";
 
 export function ProfileRoute() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,16 +23,38 @@ export function ProfileRoute() {
   };
 
   return (
-    <Navigation>
-      <Image className="icon" src={facebook_logo_icon} alt="" />
-      <SearchBar placeholder="Search" onChange={handleSearch}></SearchBar>
-      <Image className="icon" src={home_icon}></Image>
-      <Image className="icon" src={subscription_icon}></Image>
-      <Image className="icon" src={storefront_icon}></Image>
-      <Image className="icon" src={group_icon}></Image>
-      <Image className="icon" src={add_icon}></Image>
-      <Image className="icon" src={notification_icon}></Image>
-      <Image className="icon" src={exit_icon}></Image>
+    <Navigation className="facebook">
+      <div data-start>
+        <Link to="/" replace>
+          <Image className="icon" src={facebook_logo_icon} alt="" />
+        </Link>
+        <SearchBar placeholder="Search" onChange={handleSearch}></SearchBar>
+      </div>
+      <div data-center>
+        <Link to="/" replace>
+          <Image className="icon" src={home_icon}></Image>
+        </Link>
+        <Link to="/" replace>
+          <Image className="icon" src={subscription_icon}></Image>
+        </Link>
+        <Link to="/" replace>
+          <Image className="icon" src={storefront_icon}></Image>
+        </Link>
+        <Link to="/" replace>
+          <Image className="icon" src={group_icon}></Image>
+        </Link>
+      </div>
+      <div data-end>
+        <Link to="/" replace>
+          <Image className="icon" src={add_icon}></Image>
+        </Link>
+        <Link to="/" replace>
+          <Image className="icon" src={notification_icon}></Image>
+        </Link>
+        <Link to="/" replace>
+          <Image className="icon" src={exit_icon}></Image>
+        </Link>
+      </div>
     </Navigation>
   );
 }
