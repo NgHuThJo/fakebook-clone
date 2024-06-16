@@ -8,7 +8,7 @@ import "@/assets/styles";
 const root = document.getElementById("root");
 
 if (!root) {
-  throw new Error("DOM root not found");
+  throw new ReferenceError("DOM root not found");
 }
 
 ReactDOM.createRoot(root).render(

@@ -1,10 +1,12 @@
 // Third party
 import { useCallback, useState } from "react";
+// Custom hooks
+import { useErrorHandler } from "./useErrorHandler";
 
 export function useFetch() {
   const [data, setData] = useState<Record<string, unknown>>();
-  const [error, setError] = useState<Error>();
   const [isLoading, setIsLoading] = useState(true);
+  const { error, setError } = useErrorHandler();
 
   const fetchData = useCallback(
     async (url: string, options?: Record<string, string>) => {
