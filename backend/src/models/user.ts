@@ -5,12 +5,16 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true,
   },
   password: {
     type: String,
     required: true,
-    minLength: [4, "Password must be at least 4 characters"],
+    minLength: [8, "Password must have at least 8 characters"],
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
   },
 });
 

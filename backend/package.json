@@ -10,7 +10,8 @@
     "dev": "tsx --watch --env-file .env ./src/app.ts",
     "server": "set DEBUG=app:* & npm run dev",
     "build": "tsc",
-    "test": "set DEBUG=app:* & vitest"
+    "test": "set DEBUG=app:* & vitest",
+    "faker": "tsx --env-file .env ./src/config/seeds.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,8 +1,8 @@
 // Third party
 import cors from "cors";
 import debug from "debug";
-import express, { json } from "express";
-import main from "@/config/mongoConfig.js";
+import express from "express";
+import { main } from "@/config/mongoConfig.js";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import session from "express-session";
@@ -24,7 +24,7 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-main().catch((err) => {
+main().catch((err: Error) => {
   logger(err);
 });
 

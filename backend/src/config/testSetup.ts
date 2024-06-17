@@ -3,7 +3,7 @@ import {
   disconnectMongoServer,
   dropDatabase,
   initializeMongoServer,
-} from "./mongoConfigTesting.ts";
+} from "./mongoConfigTesting.js";
 
 beforeAll(async () => {
   await initializeMongoServer();
