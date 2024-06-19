@@ -1,21 +1,17 @@
+// Third party
 import { faker } from "@faker-js/faker";
 import mongoose from "mongoose";
-import { main } from "./mongoConfig.js";
+// Custom modules
+import { main } from "./mongo-prod-server.js";
+import { generateUser } from "@/test/data-generator.js";
+// Models
 import User from "@/models/user.js";
-
-const createFakeUser = () => {
-  return {
-    username: faker.person.fullName(),
-    password: faker.internet.password(),
-    email: faker.internet.email(),
-  };
-};
 
 const seedUsers = async () => {
   await main();
 
   await User.deleteMany({});
-  const users = Array.from({ length: 5 }, createFakeUser);
+  const users = Array.from({ length: 5 }, generateUser);
   await User.insertMany(users);
 
   console.log("Fake users saved...");

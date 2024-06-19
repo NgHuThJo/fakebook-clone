@@ -1,5 +1,12 @@
 import { model, Schema } from "mongoose";
 
+export type UserType = {
+  username: string;
+  password: string;
+  email: string;
+  isVerified: boolean;
+};
+
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -15,6 +22,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
   },
 });
 

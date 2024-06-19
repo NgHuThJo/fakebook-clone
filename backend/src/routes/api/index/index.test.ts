@@ -1,104 +1,103 @@
 // Third party
-import bcryptjs from "bcryptjs";
-import debug from "debug";
 import express from "express";
-import mongoose from "mongoose";
-import passport from "passport";
-import session from "express-session";
 import request from "supertest";
 // Collections
-import User from "../../../models/user.js";
+import User from "@/models/user.js";
 // Router
 import indexRouter from "./index.js";
-// Custom code
-import { setupLocalStrategy } from "../../../services/authentication/passport.js";
 
-const logger = debug("chat-app:index.test");
 const app = express();
-const saltLength = 10;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-setupLocalStrategy();
-app.use(
-  session({
-    secret: "catsanddogs",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
-    },
-  })
-);
-app.use(passport.session());
-
 app.use("/", indexRouter);
 
-// Mock user data
-const fakeData = [
-  {
-    username: "Johnny Doe",
-    password: await bcryptjs.hash("password", saltLength),
-  },
-  {
-    username: "Jane Doe",
-    password: await bcryptjs.hash("password", saltLength),
-  },
-];
+describe("post /signup", () => {
+  it("should create a new user and return 201 status with the correct data", async () => {
+    const res = await request(app).post("/signup").send({
+      username: "John Doe",
+      email: "john.doe@gmail.com",
+      password: "password",
+    });
 
-describe("index routes", () => {
+    expect(res.status).toBe(201);
+    expect(res.body).toMatchObject({
+      emailToken: expect.any(String),
+      message: expect.any(String),
+    });
+
+    const user = await User.findOne({ email: "john.doe@gmail.com" });
+    expect(user).toHaveProperty("email");
+  });
+
+  it("should return 400 status for missing fields", async () => {
+    const res = await request(app).post("/signup").send({
+      username: "John Doe",
+    });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("errors");
+  });
+
+  it("should  return 400 status for invalid input", async () => {
+    const res = await request(app).post("/signup").send({
+      username: "John Doe",
+      email: "john.doegmail.com",
+      password: "password",
+    });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("errors");
+  });
+
+  it("should not allow duplicate email signup", async () => {
+    let res = await request(app).post("/signup").send({
+      username: "John Doe",
+      email: "john.doe@gmail.com",
+      password: "password",
+    });
+
+    res = await request(app).post("/signup").send({
+      username: "John Doe",
+      email: "john.doe@gmail.com",
+      password: "password",
+    });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty(
+      "message",
+      "This email address is already in use. Please try another email address!"
+    );
+  });
+});
+
+describe("post /login", () => {
   beforeEach(async () => {
-    // Save fake users in data base
-    try {
-      await Promise.all(
-        fakeData.map((userData) => {
-          const newUser = new User(userData);
-          newUser.save();
-        })
-      );
-    } catch (err) {
-      logger(err);
-    }
-  });
-
-  describe("post /signup", () => {
-    it("should return status code 200", async () => {
-      const response = await request(app).post("/signup").send({
-        username: "Johnnie Doe",
-        password: "password",
-      });
-
-      expect(response.status).toBe(200);
-    });
-
-    it("should return status code 400 because password is too short", async () => {
-      const response = await request(app).post("/signup").send({
-        username: "Johnnie Doe",
-        password: "sho",
-      });
-
-      expect(response.status).toBe(400);
+    await request(app).post("/signup").send({
+      username: "John Doe",
+      email: "john.doe@gmail.com",
+      password: "password",
     });
   });
 
-  describe("post /login", () => {
-    it("should return status code 200", async () => {
-      const response = await request(app).post("/login").send({
-        username: "Johnny Doe",
-        password: "password",
-      });
-
-      expect(response.status).toBe(200);
+  it("should return 200 status with jwt token", async () => {
+    const res = await request(app).post("/login").send({
+      email: "john.doe@gmail.com",
+      password: "password",
     });
 
-    it("should return status code 401", async () => {
-      const response = await request(app).post("/login").send({
-        username: "Johnny Doe",
-        password: "wrongpassword",
-      });
+    console.log(res.body);
 
-      expect(response.status).toBe(401);
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("token");
+  });
+
+  it("should return status code 401", async () => {
+    const res = await request(app).post("/login").send({
+      username: "Johnny Doe",
+      password: "wrongpassword",
     });
+
+    expect(res.status).toBe(401);
   });
 });

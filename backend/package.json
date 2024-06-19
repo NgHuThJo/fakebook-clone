@@ -7,11 +7,11 @@
   "main": "app.js",
   "scripts": {
     "start": "node ./dist/app.js",
-    "dev": "tsx --watch --env-file .env ./src/app.ts",
+    "dev": "tsx --watch --env-file=.env ./src/app.ts",
     "server": "set DEBUG=app:* & npm run dev",
     "build": "tsc",
-    "test": "set DEBUG=app:* & vitest",
-    "faker": "tsx --env-file .env ./src/config/seeds.ts"
+    "test": "set DEBUG=app:* & node --env-file=.env ./node_modules/vitest/vitest.mjs",
+    "faker": "tsx --env-file=.env ./src/config/seeds.ts"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +25,7 @@
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
     "http-proxy-middleware": "^3.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.4",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",

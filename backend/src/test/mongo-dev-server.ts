@@ -1,5 +1,5 @@
 //// mongoConfigTesting.js
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
 const mongoServer = await MongoMemoryServer.create();

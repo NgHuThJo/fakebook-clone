@@ -2,15 +2,15 @@
 import cors from "cors";
 import debug from "debug";
 import express from "express";
-import { main } from "@/config/mongoConfig.js";
+import { main } from "@/config/mongo-prod-server.js";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import session from "express-session";
 import { createProxyMiddleware } from "http-proxy-middleware";
 // Passport
-import { setupLocalStrategy } from "@/services/authentication/passport.js";
+import { setupLocalStrategy } from "@/services/passport-strategies.js";
 // WebSocket
-import "@/services/websocket/webSocketSetup.js";
+import "@/services/webSocketSetup.js";
 // Routers
 import apiRouter from "@/routes/api.js";
 

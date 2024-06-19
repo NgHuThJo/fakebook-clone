@@ -2,7 +2,7 @@ import bcryptjs from "bcryptjs";
 import debug from "debug";
 import LocalStrategy from "passport-local";
 import passport from "passport";
-import User from "../../models/user.js";
+import User from "../models/user.js";
 
 const logger = debug("blog-api:passport");
 
