@@ -5,6 +5,7 @@ import request from "supertest";
 import User from "@/models/user.js";
 // Router
 import indexRouter from "./index.js";
+import { i } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 const app = express();
 
@@ -39,7 +40,7 @@ describe("post /signup", () => {
     expect(res.body).toHaveProperty("errors");
   });
 
-  it("should  return 400 status for invalid input", async () => {
+  it("should return 400 status for invalid input", async () => {
     const res = await request(app).post("/signup").send({
       username: "John Doe",
       email: "john.doegmail.com",
@@ -86,18 +87,33 @@ describe("post /login", () => {
       password: "password",
     });
 
-    console.log(res.body);
-
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("token");
+    expect(res.body).toMatchObject({
+      message: expect.any(String),
+      token: expect.any(String),
+    });
   });
 
-  it("should return status code 401", async () => {
+  it("should return 401 status for invalid email address", async () => {
     const res = await request(app).post("/login").send({
-      username: "Johnny Doe",
+      email: "joe.@gmail.com",
+      password: "password",
+    });
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty(
+      "message",
+      'The email address "joe.@gmail.com" is not associated with any account. Please check and try again!'
+    );
+  });
+
+  it("should return 401 status for wrong password", async () => {
+    const res = await request(app).post("/login").send({
+      email: "john.doe@gmail.com",
       password: "wrongpassword",
     });
 
     expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message", "Wrong password!");
   });
 });

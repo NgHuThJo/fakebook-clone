@@ -98,15 +98,3 @@ export const postLogin = [
     });
   }),
 ];
-
-export const postLogout: express.RequestHandler = (req, res, next) => {
-  req.logout((err: Error) => {
-    if (err) {
-      return next(err);
-    }
-  });
-
-  res.json({
-    message: "logout successful",
-  });
-};
