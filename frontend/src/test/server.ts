@@ -4,7 +4,7 @@ import { setupServer } from "msw/node";
 export const handlers = [
   http.post("/api/login", () => {
     return HttpResponse.json({
-      message: "Success",
+      token: "JWT",
     });
   }),
   http.post("/api/signup", () => {

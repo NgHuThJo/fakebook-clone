@@ -1,10 +1,9 @@
 // Third party
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-// Global routes
+// Routes
 import { App } from "@/App";
 import { ErrorRoute } from "./error/ErrorRoute";
-
-// Feature routes
+// Loaders and actions
 import { loginAction } from "@/features/auth/components/login/login";
 // Utility
 import { apiClient } from "@/lib/apiClient";
@@ -26,7 +25,7 @@ export const routesConfig = [
         action: loginAction(apiClient),
       },
       {
-        path: "profile",
+        path: "/profile",
         lazy: async () => {
           const { ProfileRoute } = await import(
             "@/features/profile/routes/profile-route"

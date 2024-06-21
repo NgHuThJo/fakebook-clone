@@ -9,8 +9,6 @@ import session from "express-session";
 import { createProxyMiddleware } from "http-proxy-middleware";
 // Passport
 import { setupLocalStrategy } from "@/services/passport-strategies.js";
-// WebSocket
-import "@/services/webSocketSetup.js";
 // Routers
 import apiRouter from "@/routes/api.js";
 

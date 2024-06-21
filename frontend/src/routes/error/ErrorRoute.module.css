@@ -2,8 +2,11 @@
   display: grid;
   justify-items: center;
   place-content: center;
+  grid-template-columns: min(80rem, 100% - 4rem);
   gap: 2rem;
   height: 100svh;
+  margin-inline: auto;
+  text-align: center;
 
   > p {
     color: red;

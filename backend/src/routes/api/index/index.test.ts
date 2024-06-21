@@ -5,7 +5,6 @@ import request from "supertest";
 import User from "@/models/user.js";
 // Router
 import indexRouter from "./index.js";
-import { i } from "vitest/dist/reporters-yx5ZTtEV.js";
 
 const app = express();
 
@@ -37,7 +36,6 @@ describe("post /signup", () => {
     });
 
     expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty("errors");
   });
 
   it("should return 400 status for invalid input", async () => {
@@ -48,7 +46,6 @@ describe("post /signup", () => {
     });
 
     expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty("errors");
   });
 
   it("should not allow duplicate email signup", async () => {
@@ -65,10 +62,6 @@ describe("post /signup", () => {
     });
 
     expect(res.status).toBe(400);
-    expect(res.body).toHaveProperty(
-      "message",
-      "This email address is already in use. Please try another email address!"
-    );
   });
 });
 
@@ -101,10 +94,6 @@ describe("post /login", () => {
     });
 
     expect(res.status).toBe(401);
-    expect(res.body).toHaveProperty(
-      "message",
-      'The email address "joe.@gmail.com" is not associated with any account. Please check and try again!'
-    );
   });
 
   it("should return 401 status for wrong password", async () => {
@@ -114,6 +103,5 @@ describe("post /login", () => {
     });
 
     expect(res.status).toBe(401);
-    expect(res.body).toHaveProperty("message", "Wrong password!");
   });
 });

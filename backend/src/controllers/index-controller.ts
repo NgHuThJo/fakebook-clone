@@ -23,8 +23,16 @@ export const postSignup = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
+      const errorsObject: Record<string, string> = {};
+
+      errors.array().forEach((error) => {
+        if (error.type === "field") {
+          errorsObject[error.path] = error.msg;
+        }
+      });
+
       res.status(400).json({
-        errors: errors.array(),
+        errors: errorsObject,
       });
       return;
     }
@@ -33,7 +41,7 @@ export const postSignup = [
 
     if (existingUser) {
       res.status(400).send({
-        message:
+        email:
           "This email address is already in use. Please try another email address!",
       });
       return;
@@ -53,7 +61,7 @@ export const postSignup = [
 
     res.status(201).send({
       emailToken: emailString,
-      message: "User created successfully!",
+      message: "User created successfully.",
     });
   }),
 ];
@@ -66,14 +74,14 @@ export const postLogin = [
 
     if (!user) {
       res.status(401).send({
-        message: `The email address "${req.body.email}" is not associated with any account. Please check and try again!`,
+        email: `The email address "${req.body.email}" is not associated with any account. Please check and try again!`,
       });
       return;
     }
 
     if (!user.isVerified) {
       res.status(401).send({
-        message: "Your email has not been verified. Please check your emails!",
+        general: "Your email has not been verified. Please check your emails!",
       });
       return;
     }
@@ -84,7 +92,9 @@ export const postLogin = [
     );
 
     if (!doesPasswordMatch) {
-      res.status(401).send({ message: "Wrong password!" });
+      res
+        .status(401)
+        .send({ password: "Wrong password. Please check and try again!" });
       return;
     }
 

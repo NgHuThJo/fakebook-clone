@@ -1,19 +1,42 @@
 // Third party
-import { ActionFunctionArgs, Form, Link } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  Link,
+  redirect,
+  useActionData,
+} from "react-router-dom";
+// Utility
+import { convertFormDataToObject } from "@/utils/object";
 // Types
 import { ApiClient } from "@/lib/apiClient";
 // Styles
 import styles from "./login.module.css";
 
+type LoginError = {
+  email: string;
+  general: string;
+  password: string;
+};
+
 export const loginAction =
   (apiClient: ApiClient) =>
-  async ({ request, params }: ActionFunctionArgs) => {
-    throw Error("Error inside login action");
+  async ({ request }: ActionFunctionArgs) => {
+    const formData = await request.formData();
+    const formObject = convertFormDataToObject(formData);
 
-    return new Response();
+    const response = await apiClient.post("/login", formObject);
+
+    if (response?.email || response?.general || response?.password) {
+      return response;
+    }
+
+    return redirect("/profile");
   };
 
 export function Login() {
+  const errors = useActionData() as LoginError;
+
   return (
     <div className={styles.container}>
       <div>
@@ -23,9 +46,17 @@ export function Login() {
       <div>
         <div className={styles["form-container"]}>
           <Form method="post">
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <button>Log In</button>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              formNoValidate
+            />
+            {errors?.email && <p>{errors.email}</p>}
+            <input type="password" name="password" placeholder="Password" />
+            {errors?.password && <p>{errors.password}</p>}
+            <button type="submit">Log In</button>
+            {errors?.general && <p>{errors.general}</p>}
           </Form>
           <Link to="/">Forgot Password?</Link>
           <div className={styles.divider}></div>

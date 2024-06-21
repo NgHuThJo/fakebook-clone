@@ -7,7 +7,7 @@ export function validateInput(formFieldName: string) {
     .trim()
     .isLength({ min: fieldMinLength })
     .withMessage(
-      `${formFieldName} must have at least ${fieldMinLength} characters.`
+      `${formFieldName} must have at least ${fieldMinLength} characters`
     )
     .escape();
 }
@@ -16,6 +16,6 @@ export function validateEmail(emailFieldName: string) {
   return body(emailFieldName)
     .trim()
     .isEmail()
-    .withMessage("Invalid email address.")
+    .withMessage("Invalid email address")
     .escape();
 }
