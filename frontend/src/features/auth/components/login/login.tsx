@@ -27,7 +27,7 @@ export const loginAction =
 
     const response = await apiClient.post("/login", formObject);
 
-    if (response?.email || response?.general || response?.password) {
+    if (!response?.token) {
       return response;
     }
 

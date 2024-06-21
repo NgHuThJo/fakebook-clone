@@ -3,12 +3,12 @@ import cors from "cors";
 import debug from "debug";
 import express from "express";
 import { main } from "@/config/mongo-prod-server.js";
-import MongoStore from "connect-mongo";
-import passport from "passport";
-import session from "express-session";
-import { createProxyMiddleware } from "http-proxy-middleware";
+// import MongoStore from "connect-mongo";
+// import passport from "passport";
+// import session from "express-session";
+// import { createProxyMiddleware } from "http-proxy-middleware";
 // Passport
-import { setupLocalStrategy } from "@/services/passport-strategies.js";
+// import { setupLocalStrategy } from "@/services/passport-strategies.js";
 // Routers
 import apiRouter from "@/routes/api.js";
 
@@ -36,24 +36,24 @@ app.use(
   })
 );
 // Authentication
-setupLocalStrategy();
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 24 * 60 * 60 * 1000,
-    },
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URL,
-      autoRemove: "native",
-    }),
-  })
-);
-app.use(passport.session());
+// setupLocalStrategy();
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: true,
+//     saveUninitialized: true,
+//     cookie: {
+//       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+//       secure: process.env.NODE_ENV === "production",
+//       maxAge: 24 * 60 * 60 * 1000,
+//     },
+//     store: MongoStore.create({
+//       mongoUrl: process.env.MONGO_URL,
+//       autoRemove: "native",
+//     }),
+//   })
+// );
+// app.use(passport.session());
 
 // Routes
 app.use("/api", apiRouter);

@@ -9,7 +9,7 @@ import { generateUser } from "@/test/data-generator";
 const newUser = generateUser();
 
 describe("login", () => {
-  it("should login new user and navigate the user to the app", async () => {
+  it("should login new user, set JWT token in cookie and navigate the user to the app", async () => {
     const user = userEvent.setup();
     const router = createMemoryRouter(routesConfig);
 
@@ -21,11 +21,11 @@ describe("login", () => {
     user.type(passwordInput, newUser.password);
 
     await waitFor(
-      () => {
+      async () => {
         const loginButton = screen.getByRole("button", { name: /log in/i });
-        user.click(loginButton);
+        await user.click(loginButton);
       },
-      { timeout: 100 }
+      { interval: 100, timeout: 100 }
     );
 
     expect(await screen.findByRole("navigation")).toBeInTheDocument();

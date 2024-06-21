@@ -98,8 +98,10 @@ export const postLogin = [
       return;
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+    const token = jwt.sign({ user: user }, process.env.JWT_SECRET);
+
+    res.cookie("jwt", token, {
+      maxAge: 1000 * 60 * 60,
     });
 
     res.status(200).send({
