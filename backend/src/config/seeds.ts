@@ -1,5 +1,4 @@
 // Third party
-import { faker } from "@faker-js/faker";
 import mongoose from "mongoose";
 // Custom modules
 import { main } from "./mongo-prod-server.js";

@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { App } from "@/App";
 import { ErrorRoute } from "./error/ErrorRoute";
 // Loaders and actions
+import { profileLoader } from "@/features/profile/routes/profile-route";
 import { loginAction } from "@/features/auth/components/login/login";
 // Utility
 import { apiClient } from "@/lib/apiClient";
@@ -33,6 +34,7 @@ export const routesConfig = [
 
           return { Component: ProfileRoute };
         },
+        loader: profileLoader(apiClient),
       },
     ],
   },
