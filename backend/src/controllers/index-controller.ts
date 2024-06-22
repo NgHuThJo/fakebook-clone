@@ -3,7 +3,6 @@ import asyncHandler from "express-async-handler";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 import debug from "debug";
-import express from "express";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 // Models

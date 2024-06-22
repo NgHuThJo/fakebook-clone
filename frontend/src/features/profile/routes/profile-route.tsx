@@ -1,7 +1,12 @@
+// Third party
 import { ChangeEvent, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { Navigation } from "@/features/profile/components/navigation/navigation";
+// Components
+import { Navigation } from "@/features/shared/navigation/navigation";
+import { Newsfeed } from "../components/newsfeed/newsfeed";
 import { Sidebar } from "../components/sidebar/sidebar";
+import { Userlist } from "../components/userlist/userlist";
+// Lib
+// Styles
 import styles from "./profile-route.module.css";
 
 export function ProfileRoute() {
@@ -15,9 +20,10 @@ export function ProfileRoute() {
     <>
       <Navigation onChange={handleSearch} />
       <main className={styles.main}>
-        <Outlet />
+        <Sidebar />
+        <Newsfeed />
+        <Userlist />
       </main>
-      <Sidebar />
     </>
   );
 }

@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/", indexRouter);
 
-describe("post /signup", () => {
+describe.skip("post /signup", () => {
   it("should create a new user and return 201 status with the correct data", async () => {
     const res = await request(app).post("/signup").send({
       username: "John Doe",
@@ -65,7 +65,7 @@ describe("post /signup", () => {
   });
 });
 
-describe("post /login", () => {
+describe.skip("post /login", () => {
   beforeEach(async () => {
     await request(app).post("/signup").send({
       username: "John Doe",

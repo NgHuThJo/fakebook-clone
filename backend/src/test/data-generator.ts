@@ -14,5 +14,14 @@ export const generateUser = () => {
     username: fullName,
     password: faker.internet.password(),
     email,
+    avatarUrl: faker.image.avatar(),
   };
 };
+
+export const generateFeed = () => {};
+
+// export const generateStory = () => {
+//   return {
+//     imgUrl: faker.image.urlLoremFlickr(),
+//   };
+// };

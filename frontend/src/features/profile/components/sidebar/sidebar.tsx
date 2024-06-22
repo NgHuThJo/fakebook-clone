@@ -40,8 +40,8 @@ const sidebarArray = [
 export function Sidebar() {
   return (
     <ul className={styles.facebook}>
-      {sidebarArray.map((item) => (
-        <li>
+      {sidebarArray.map((item, index) => (
+        <li key={index}>
           <Image className="icon" src={item.img}></Image>
           <Link to={item.to}>{item.label}</Link>
         </li>
