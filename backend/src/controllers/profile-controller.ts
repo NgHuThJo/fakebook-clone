@@ -4,17 +4,19 @@ import express from "express";
 import User from "@/models/user.js";
 
 export const getUsers = [
-  asyncHandler(async (req, res, next) => {
-    const users = await User.find({}).exec();
-
-    if (!users) {
-      res.status(404).json({
-        error: "Users not found",
+  asyncHandler((req, res, next) => {
+    User.find({})
+      .then((foundUsers) => {
+        if (foundUsers) {
+          res.json({
+            users: foundUsers,
+          });
+        }
+      })
+      .catch((err) => {
+        res.status(500).json({
+          error: err,
+        });
       });
-
-      return;
-    }
-
-    res.json(users);
   }),
 ];
