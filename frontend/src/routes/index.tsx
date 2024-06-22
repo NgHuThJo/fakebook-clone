@@ -4,7 +4,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { App } from "@/App";
 import { ErrorRoute } from "./error/ErrorRoute";
 // Loaders and actions
-import { loginAction } from "@/features/auth/components/login/login";
+import { profileLoader } from "@/features/profile/routes/profile-route";
+import { authAction } from "@/features/auth/routes/auth-route";
 // Utility
 import { apiClient } from "@/lib/apiClient";
 
@@ -22,7 +23,7 @@ export const routesConfig = [
 
           return { Component: AuthRoute };
         },
-        action: loginAction(apiClient),
+        action: authAction(apiClient),
       },
       {
         path: "/profile",
@@ -33,6 +34,7 @@ export const routesConfig = [
 
           return { Component: ProfileRoute };
         },
+        loader: profileLoader(apiClient),
       },
     ],
   },

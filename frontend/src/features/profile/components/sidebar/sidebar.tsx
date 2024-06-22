@@ -39,7 +39,7 @@ const sidebarArray = [
 
 export function Sidebar() {
   return (
-    <ul className={styles.facebook}>
+    <ul className={styles.facebook} aria-label="sidebar">
       {sidebarArray.map((item, index) => (
         <li key={index}>
           <Image className="icon" src={item.img}></Image>

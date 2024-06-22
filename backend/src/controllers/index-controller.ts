@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 import debug from "debug";
+import { faker } from "@faker-js/faker";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 // Models
@@ -31,7 +32,7 @@ export const postSignup = [
       });
 
       res.status(400).json({
-        errors: errorsObject,
+        ...errorsObject,
       });
       return;
     }
@@ -40,26 +41,27 @@ export const postSignup = [
 
     if (existingUser) {
       res.status(400).send({
-        email:
+        general:
           "This email address is already in use. Please try another email address!",
       });
       return;
     }
 
-    const emailString = crypto.randomBytes(64).toString("hex");
+    // const emailString = crypto.randomBytes(64).toString("hex");
     const hashedPassword = await bcryptjs.hash(req.body.password, saltLength);
     // isVerified is true for the sake of testing
     const user = new User({
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
+      avatarUrl: req.body?.avatarurl || faker.image.avatar(),
       isVerified: true,
     });
 
     await user.save();
 
     res.status(201).send({
-      emailToken: emailString,
+      // emailToken: emailString,
       message: "User created successfully.",
     });
   }),

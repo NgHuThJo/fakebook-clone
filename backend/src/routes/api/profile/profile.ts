@@ -3,6 +3,7 @@ import * as profileController from "@/controllers/profile-controller.js";
 
 const router = express.Router();
 
-router.get("/", profileController.getUsers);
+router.get("/users", profileController.getUsers);
+router.get("/feeds", profileController.getFeeds);
 
 export default router;

@@ -13,7 +13,7 @@ export function ErrorRoute({
   return (
     <div className={styles.default} {...restProps}>
       <h1>Something went wrong.</h1>
-      <p>{(error as Error).message}</p>
+      <p>{(error as Error).message || "No error message"}</p>
       <Link to="/" replace aria-label="Go to home">
         You can go back to the home page by clicking here, though!
       </Link>

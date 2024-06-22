@@ -1,0 +1,35 @@
+.feedlist {
+  display: grid;
+  gap: 1rem;
+  margin-block: 2rem;
+
+  > * + * {
+    margin-top: var(--flow-spacing);
+  }
+}
+
+.feed {
+  padding: 2rem;
+  border-radius: 1rem;
+  font-weight: var(--fw-button);
+  font-size: 1.125rem;
+  background-color: white;
+  overflow: hidden;
+
+  > * + * {
+    margin-top: var(--flow-spacing);
+  }
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.likes {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: var(--fw-button);
+  font-size: 1rem;
+}

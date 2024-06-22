@@ -7,7 +7,9 @@
   "main": "index.js",
   "scripts": {
     "client": "cd frontend & npm run dev",
-    "server": "cd backend & npm run server"
+    "server": "cd backend & npm run server",
+    "clienttest": "cd frontend & npm run test",
+    "servertest": "cd backend & npm run test"
   },
   "keywords": [],
   "author": "",

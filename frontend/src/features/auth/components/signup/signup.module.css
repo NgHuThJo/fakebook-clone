@@ -1,0 +1,86 @@
+.dialog {
+  display: grid;
+  place-content: center;
+  grid-template-columns: min(30rem, 100% - var(--p-inline-container));
+  width: 100svw;
+  height: 100svh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: left;
+  background-color: hsl(var(--c-brand) / 0.2);
+}
+
+.grid {
+  composes: flow-spacing from global;
+
+  position: relative;
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1.25rem;
+  }
+
+  > button:first-of-type {
+    margin: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: white;
+}
+
+.divider {
+  border-bottom: 1px solid black;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+
+  input {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid hsl(216, 8%, 88%);
+    border-radius: 0.5rem;
+    outline: none;
+    caret-color: hsl(var(--c-brand));
+  }
+
+  input:focus {
+    border-color: hsl(var(--c-brand));
+  }
+
+  p {
+    font-weight: 500;
+    font-size: 1rem;
+    color: red;
+  }
+
+  p::first-letter {
+    text-transform: capitalize;
+  }
+
+  button {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-weight: var(--fw-button);
+    color: white;
+    background-color: hsl(var(--c-brand));
+  }
+
+  button:hover {
+    opacity: 0.75;
+    transition: opacity var(--transition-duration);
+  }
+}
+
+p.success {
+  color: green;
+}

@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 const LikeSchema = new Schema({
-  author: {
+  liker: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },

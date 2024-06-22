@@ -69,21 +69,18 @@
   }
 
   button,
-  input,
-  > a:last-of-type {
+  input {
     border-radius: var(--bd-rd-form);
   }
 
-  button,
-  > a:last-of-type {
+  button {
     padding: var(--p-form);
     font-weight: var(--fw-button);
     color: white;
     transition: opacity 0.25s;
   }
 
-  button:hover,
-  > a:last-of-type:hover {
+  button:hover {
     opacity: 0.75;
   }
 
@@ -95,7 +92,9 @@
     color: hsl(var(--c-brand));
   }
 
-  > a:last-of-type {
+  > button:last-of-type {
+    display: block;
+    margin-inline: auto;
     font-size: 1.0625rem;
     background-color: hsl(110, 63%, 44%);
   }
