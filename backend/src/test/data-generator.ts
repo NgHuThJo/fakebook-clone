@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { faker } from "@faker-js/faker";
 
 export const generateUser = () => {
@@ -18,10 +19,10 @@ export const generateUser = () => {
   };
 };
 
-export const generateFeed = () => {};
-
-// export const generateStory = () => {
-//   return {
-//     imgUrl: faker.image.urlLoremFlickr(),
-//   };
-// };
+export const generateFeed = () => {
+  return {
+    author: new mongoose.Types.ObjectId(),
+    created: faker.date.recent(),
+    imgUrl: faker.image.urlLoremFlickr(),
+  };
+};

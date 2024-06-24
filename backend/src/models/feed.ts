@@ -4,7 +4,7 @@ import like from "./like.js";
 const FeedSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
-    required: true,
+    ref: "User",
   },
   created: {
     type: Date,
@@ -15,6 +15,10 @@ const FeedSchema = new Schema({
   imgUrl: {
     type: String,
     required: true,
+  },
+  likesCount: {
+    type: Number,
+    default: 0,
   },
 });
 

@@ -8,7 +8,6 @@ import User from "@/models/user.js";
 
 const seedUsers = async () => {
   await main();
-
   await User.deleteMany({});
   const users = Array.from({ length: 5 }, generateUser);
   await User.insertMany(users);

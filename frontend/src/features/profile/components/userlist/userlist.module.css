@@ -1,0 +1,11 @@
+.listitem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: fit-content;
+  padding: 1.5rem;
+
+  > img {
+    border: 2px solid hsl(var(--c-brand));
+  }
+}

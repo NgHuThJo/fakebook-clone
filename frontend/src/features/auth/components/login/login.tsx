@@ -6,6 +6,8 @@ import {
   redirect,
   useActionData,
 } from "react-router-dom";
+// Api
+import { loginUser } from "../../api/login";
 // Utility
 import { convertFormDataToObject } from "@/utils/object";
 // Types
@@ -25,9 +27,10 @@ export const loginAction =
     const formData = await request.formData();
     const formObject = convertFormDataToObject(formData);
 
-    const response = await apiClient.post("/login", formObject);
+    const response = await loginUser(apiClient, formObject);
 
-    if (!response?.token) {
+    // request errors
+    if (response.email || response.general || response.password) {
       return response;
     }
 
