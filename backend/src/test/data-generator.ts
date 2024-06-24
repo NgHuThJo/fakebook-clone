@@ -22,6 +22,7 @@ export const generateUser = () => {
 export const generateFeed = () => {
   return {
     author: new mongoose.Types.ObjectId(),
+    post: faker.lorem.paragraph(),
     created: faker.date.recent(),
     imgUrl: faker.image.urlLoremFlickr(),
   };

@@ -37,7 +37,7 @@ export function ProfileRoute() {
       <Navigation onChange={handleSearch} />
       <main className={styles.main}>
         <Sidebar />
-        <Newsfeed />
+        <Newsfeed feedData={loaderData.feeds} />
         <Userlist userData={loaderData.users} />
       </main>
     </>

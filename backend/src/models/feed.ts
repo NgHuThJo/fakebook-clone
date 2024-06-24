@@ -6,6 +6,10 @@ const FeedSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  post: {
+    type: String,
+    minLength: 1,
+  },
   created: {
     type: Date,
     default: Date.now,

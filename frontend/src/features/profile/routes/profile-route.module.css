@@ -1,13 +1,12 @@
 .main {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  color: hsl(var(--c-brand));
+  color: hsl(var(--c-underline));
 }
 
 a {
   font-weight: var(--fw-button);
   text-decoration: none;
-  color: hsl(var(--c-underline));
 }
 
 a:hover {
