@@ -12,8 +12,6 @@ type FeedData = {
 type NewsfeedProps = React.PropsWithoutRef<{ feedData: FeedData[] }>;
 
 export function Newsfeed({ feedData }: NewsfeedProps) {
-  console.log(feedData);
-
   return (
     <ul className={styles.feedlist} aria-label="newsfeed">
       {feedData.map((feed, index) => (

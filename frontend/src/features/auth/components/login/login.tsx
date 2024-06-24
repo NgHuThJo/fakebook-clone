@@ -1,11 +1,7 @@
 // Third party
-import {
-  ActionFunctionArgs,
-  Form,
-  Link,
-  redirect,
-  useActionData,
-} from "react-router-dom";
+import { Form, Link, redirect, useActionData } from "react-router-dom";
+// Custom hooks
+import { useDisclosure } from "@/hooks/useDisclosure";
 // Api
 import { loginUser } from "../../api/login";
 // Utility
@@ -21,23 +17,21 @@ type LoginError = {
   password: string;
 };
 
-export const loginAction =
-  (apiClient: ApiClient) =>
-  async ({ request }: ActionFunctionArgs) => {
-    const formData = await request.formData();
-    const formObject = convertFormDataToObject(formData);
+export const loginAction = async (formData: FormData, apiClient: ApiClient) => {
+  const formObject = convertFormDataToObject(formData);
 
-    const response = await loginUser(apiClient, formObject);
+  const response = await loginUser(apiClient, formObject);
 
-    // request errors
-    if (response.email || response.general || response.password) {
-      return response;
-    }
+  // request errors
+  if (response.email || response.general || response.password) {
+    return response;
+  }
 
-    return redirect("/profile");
-  };
+  return redirect("/profile");
+};
 
 export function Login() {
+  const { isOpen, toggle } = useDisclosure();
   const errors = useActionData() as LoginError;
 
   return (
@@ -58,12 +52,14 @@ export function Login() {
             {errors?.email && <p>{errors.email}</p>}
             <input type="password" name="password" placeholder="Password" />
             {errors?.password && <p>{errors.password}</p>}
-            <button type="submit">Log In</button>
+            <button type="submit" name="intent" value="login">
+              Log In
+            </button>
             {errors?.general && <p>{errors.general}</p>}
           </Form>
           <Link to="/">Forgot Password?</Link>
           <div className={styles.divider}></div>
-          <Link to="/">Create new account</Link>
+          <button onClick={toggle}>Create new account</button>
         </div>
         <p>
           <Link to="/">Create a Page</Link> for a celebrity, brand or business.

@@ -1,5 +1,33 @@
+// Third party
+import { ActionFunctionArgs, json } from "react-router-dom";
+// Components
 import { Login } from "../components/login/login";
+// Api
+import { loginAction } from "../components/login/login";
+// Types
+import { ApiClient } from "@/lib/apiClient";
+// Styles
 import styles from "./auth-route.module.css";
+
+export const authAction =
+  (apiClient: ApiClient) =>
+  async ({ request }: ActionFunctionArgs) => {
+    const formData = await request.formData();
+    const intent = formData.get("intent");
+
+    switch (intent) {
+      case "login": {
+        return loginAction(formData, apiClient);
+      }
+    }
+
+    throw json(
+      {
+        message: "Invalid intent.",
+      },
+      { status: 400 }
+    );
+  };
 
 export function AuthRoute() {
   return (
