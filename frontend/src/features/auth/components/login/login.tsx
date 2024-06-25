@@ -1,5 +1,5 @@
 // Third party
-import { Form, Link, redirect, useActionData } from "react-router-dom";
+import { Form, Link, json, redirect, useActionData } from "react-router-dom";
 // Custom hooks
 import { useDisclosure } from "@/hooks/useDisclosure";
 // Api
@@ -8,31 +8,29 @@ import { loginUser } from "../../api/login";
 import { convertFormDataToObject } from "@/utils/object";
 // Types
 import { ApiClient } from "@/lib/apiClient";
+import { AuthErrors } from "../../routes/auth-route";
 // Styles
 import styles from "./login.module.css";
-
-type LoginError = {
-  email: string;
-  general: string;
-  password: string;
-};
+import { Signup } from "../signup/signup";
 
 export const loginAction = async (formData: FormData, apiClient: ApiClient) => {
   const formObject = convertFormDataToObject(formData);
 
   const response = await loginUser(apiClient, formObject);
 
+  console.log(response);
+
   // request errors
   if (response.email || response.general || response.password) {
-    return response;
+    return json({ login: response });
   }
 
   return redirect("/profile");
 };
 
 export function Login() {
-  const { isOpen, toggle } = useDisclosure();
-  const errors = useActionData() as LoginError;
+  const { isOpen, close, toggle } = useDisclosure();
+  const action = useActionData() as AuthErrors;
 
   return (
     <div className={styles.container}>
@@ -49,13 +47,13 @@ export function Login() {
               placeholder="Email"
               formNoValidate
             />
-            {errors?.email && <p>{errors.email}</p>}
+            {action?.login?.email && <p>{action?.login.email}</p>}
             <input type="password" name="password" placeholder="Password" />
-            {errors?.password && <p>{errors.password}</p>}
+            {action?.login?.password && <p>{action?.login.password}</p>}
             <button type="submit" name="intent" value="login">
               Log In
             </button>
-            {errors?.general && <p>{errors.general}</p>}
+            {action?.login?.general && <p>{action?.login.general}</p>}
           </Form>
           <Link to="/">Forgot Password?</Link>
           <div className={styles.divider}></div>
@@ -68,6 +66,7 @@ export function Login() {
           <Link to="/profile">Or continue as guest.</Link>
         </p>
       </div>
+      {isOpen && <Signup close={close} />}
     </div>
   );
 }

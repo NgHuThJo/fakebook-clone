@@ -22,7 +22,6 @@ describe("post /signup", () => {
 
     expect(res.status).toBe(201);
     expect(res.body).toMatchObject({
-      emailToken: expect.any(String),
       message: expect.any(String),
     });
 

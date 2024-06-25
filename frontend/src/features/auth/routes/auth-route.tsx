@@ -8,6 +8,13 @@ import { loginAction } from "../components/login/login";
 import { ApiClient } from "@/lib/apiClient";
 // Styles
 import styles from "./auth-route.module.css";
+import { signupAction } from "../components/signup/signup";
+
+type AuthKey = "login" | "signup";
+
+export type AuthErrors = {
+  [K in AuthKey]: Record<string, string>;
+};
 
 export const authAction =
   (apiClient: ApiClient) =>
@@ -18,6 +25,9 @@ export const authAction =
     switch (intent) {
       case "login": {
         return loginAction(formData, apiClient);
+      }
+      case "signup": {
+        return signupAction(formData, apiClient);
       }
     }
 

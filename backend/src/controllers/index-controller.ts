@@ -31,7 +31,7 @@ export const postSignup = [
       });
 
       res.status(400).json({
-        errors: errorsObject,
+        ...errorsObject,
       });
       return;
     }
@@ -40,13 +40,13 @@ export const postSignup = [
 
     if (existingUser) {
       res.status(400).send({
-        email:
+        general:
           "This email address is already in use. Please try another email address!",
       });
       return;
     }
 
-    const emailString = crypto.randomBytes(64).toString("hex");
+    // const emailString = crypto.randomBytes(64).toString("hex");
     const hashedPassword = await bcryptjs.hash(req.body.password, saltLength);
     // isVerified is true for the sake of testing
     const user = new User({
@@ -59,7 +59,7 @@ export const postSignup = [
     await user.save();
 
     res.status(201).send({
-      emailToken: emailString,
+      // emailToken: emailString,
       message: "User created successfully.",
     });
   }),

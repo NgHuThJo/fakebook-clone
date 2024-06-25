@@ -12,6 +12,7 @@
 
 .main {
   display: grid;
+  padding-block: 2rem;
   color: hsl(216, 8%, 12%);
   background-color: hsl(216, 20%, 95%);
 }
