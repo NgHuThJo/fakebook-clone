@@ -4,9 +4,7 @@ import mongoose from "mongoose";
 import request from "supertest";
 import { vi } from "vitest";
 // Collections
-import Feed from "@/models/feed.js";
-import Post from "@/models/post.js";
-import User from "@/models/user.js";
+import { Feed, Post, User } from "@/models/index.js";
 // Router
 import profileRouter from "./profile.js";
 import {
@@ -71,7 +69,8 @@ describe("get /feeds", () => {
   });
 
   it("should return 500 status with error message if the database query fails", async () => {
-    const querySpy = vi.spyOn(Feed, "find");
+    const querySpy = vi.spyOn(Feed, "aggregate");
+
     querySpy.mockRejectedValue(new Error("Database error"));
 
     const res = await request(app).get("/feeds");

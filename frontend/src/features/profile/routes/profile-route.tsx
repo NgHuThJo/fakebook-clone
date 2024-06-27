@@ -1,6 +1,6 @@
 // Third party
 import { ChangeEvent, useState } from "react";
-import { json, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 // Components
 import { Navigation } from "@/features/shared/navigation/navigation";
 import { Newsfeed } from "../components/newsfeed/newsfeed";
@@ -20,6 +20,8 @@ export const profileLoader = (apiClient: ApiClient) => async () => {
     getFeeds(apiClient),
     getUsers(apiClient),
   ]);
+
+  console.log(feeds);
 
   return { feeds, users };
 };
