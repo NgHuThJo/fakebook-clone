@@ -32,7 +32,7 @@ export function Signup({ close }: SignupProps) {
   };
 
   return (
-    <div className={styles.dialog}>
+    <div className={styles.dialog} aria-label="dialog">
       <div className={styles.grid}>
         <h2>Sign up</h2>
         <p>It's quick and easy.</p>
@@ -48,9 +48,11 @@ export function Signup({ close }: SignupProps) {
             Sign up
           </button>
           {action?.signup?.general && <p>{action?.signup.general}</p>}
-          {action?.signup?.message && <p>{action?.signup.message}</p>}
+          {action?.signup?.message && (
+            <p className={styles.success}>{action?.signup.message}</p>
+          )}
         </Form>
-        <button onClick={close}>
+        <button onClick={close} aria-label="exit-button">
           <Image className="icon" src={exit_icon}></Image>
         </button>
       </div>

@@ -14,6 +14,7 @@ const PostSchema = new Schema({
   post: {
     type: String,
     required: true,
+    minLength: [1, "Post must not be empty"],
   },
   created: {
     type: Date,

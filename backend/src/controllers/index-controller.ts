@@ -3,6 +3,7 @@ import asyncHandler from "express-async-handler";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 import debug from "debug";
+import { faker } from "@faker-js/faker";
 import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 // Models
@@ -53,6 +54,7 @@ export const postSignup = [
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
+      avatarUrl: req.body?.avatarurl || faker.image.avatar(),
       isVerified: true,
     });
 

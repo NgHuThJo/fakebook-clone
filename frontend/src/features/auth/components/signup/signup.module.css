@@ -80,3 +80,7 @@
     transition: opacity var(--transition-duration);
   }
 }
+
+p.success {
+  color: green;
+}

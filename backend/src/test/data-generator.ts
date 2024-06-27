@@ -19,11 +19,15 @@ export const generateUser = () => {
   };
 };
 
-export const generateFeed = () => {
+export const generatePost = (userId: mongoose.Types.ObjectId) => ({
+  author: userId,
+  title: faker.lorem.sentence(),
+  post: faker.lorem.paragraphs(),
+});
+
+export const generateFeed = (postId: mongoose.Types.ObjectId) => {
   return {
-    author: new mongoose.Types.ObjectId(),
-    post: faker.lorem.paragraph(),
-    created: faker.date.recent(),
+    post: postId,
     imgUrl: faker.image.urlLoremFlickr(),
   };
 };

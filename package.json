@@ -8,8 +8,8 @@
   "scripts": {
     "client": "cd frontend & npm run dev",
     "server": "cd backend & npm run server",
-    "client-test": "cd frontend & npm run test",
-    "server-test": "cd backend & npm run test"
+    "clienttest": "cd frontend & npm run test",
+    "servertest": "cd backend & npm run test"
   },
   "keywords": [],
   "author": "",

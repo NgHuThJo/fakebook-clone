@@ -1,5 +1,7 @@
 // Third party
 import express from "express";
+// Models
+import "@/models";
 // Routers
 import indexRouter from "./api/index/index.js";
 import profileRouter from "./api/profile/profile.js";

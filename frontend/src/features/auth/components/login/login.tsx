@@ -18,8 +18,6 @@ export const loginAction = async (formData: FormData, apiClient: ApiClient) => {
 
   const response = await loginUser(apiClient, formObject);
 
-  console.log(response);
-
   // request errors
   if (response.email || response.general || response.password) {
     return json({ login: response });

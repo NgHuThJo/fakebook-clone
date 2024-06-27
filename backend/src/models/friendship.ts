@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 
-const FriendShipSchema = new Schema(
+const FriendshipSchema = new Schema(
   {
     sender: {
       type: Schema.Types.ObjectId,
@@ -23,4 +23,4 @@ const FriendShipSchema = new Schema(
   }
 );
 
-export default model("Friendship", FriendShipSchema);
+export default model("Friendship", FriendshipSchema);
