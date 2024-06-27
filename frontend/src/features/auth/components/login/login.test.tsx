@@ -20,13 +20,10 @@ describe("login", () => {
     const passwordInput = screen.getByPlaceholderText("Password");
     user.type(passwordInput, newUser.password);
 
-    await waitFor(
-      async () => {
-        const loginButton = screen.getByRole("button", { name: /log in/i });
-        await user.click(loginButton);
-      },
-      { interval: 100, timeout: 100 }
-    );
+    await waitFor(async () => {
+      const loginButton = screen.getByRole("button", { name: /log in/i });
+      await user.click(loginButton);
+    });
 
     expect(await screen.findByRole("navigation")).toBeInTheDocument();
   });

@@ -107,7 +107,6 @@ export const postLogin = [
 
     res.status(200).send({
       message: "User successfully logged in.",
-      token,
     });
   }),
 ];

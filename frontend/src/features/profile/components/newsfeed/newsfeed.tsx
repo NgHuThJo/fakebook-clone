@@ -1,5 +1,5 @@
+import { Link } from "react-router-dom";
 import { Image } from "@/components/ui/image";
-import { formatDate } from "@/utils/intl";
 import styles from "./newsfeed.module.css";
 import { thumbs_up_icon } from "@/assets/images/icons";
 
@@ -28,13 +28,20 @@ type FeedData = {
 type NewsfeedProps = React.PropsWithoutRef<{ feedData: FeedData[] }>;
 
 export function Newsfeed({ feedData }: NewsfeedProps) {
+  const handleLikes = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    postId: string
+  ) => {};
+
   return (
     <ul className={styles.feedlist} aria-label="newsfeed">
       {feedData.map((feed, index) => (
         <li className={styles.feed} key={index}>
           <Image src={feed.imgUrl}></Image>
+          <h2>{feed.post.title}</h2>
           <p>{feed.post.post}</p>
           <div>
+            <Link to="/">User: {feed.post.author.username}</Link>
             <p>Created: {feed.post.created}</p>
             <button className={styles.likes}>
               <Image className="icon" src={thumbs_up_icon}></Image>

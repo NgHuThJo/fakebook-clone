@@ -2,7 +2,7 @@ import { ObjectKey } from "@/types";
 
 async function fetchWrapper(endpoint: string, options?: RequestInit) {
   try {
-    console.log(`${import.meta.env.VITE_API_URL}${endpoint}`);
+    // console.log(`${import.meta.env.VITE_API_URL}${endpoint}`);
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
       credentials: "include",

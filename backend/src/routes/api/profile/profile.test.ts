@@ -80,3 +80,9 @@ describe("get /feeds", () => {
     querySpy.mockRestore();
   });
 });
+
+describe("post /feeds/:id", () => {
+  it("should return 200 status with updated like", async () => {
+    expect(true).toBeFalsy();
+  });
+});

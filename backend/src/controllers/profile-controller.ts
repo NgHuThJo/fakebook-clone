@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import debug from "debug";
-import { Feed, Post, User } from "@/models/index.js";
+import { Feed, Like, Post, User } from "@/models/index.js";
 import { RequestHandler } from "express";
 
 export const getUsers = [
@@ -78,8 +78,6 @@ const feedPipeline = async () => {
   return result;
 };
 
-feedPipeline();
-
 export const getFeeds: RequestHandler[] = [
   async (req, res, next) => {
     try {
@@ -94,4 +92,28 @@ export const getFeeds: RequestHandler[] = [
       });
     }
   },
+];
+
+export const postLike = [
+  asyncHandler(async (req, res, next) => {
+    const { liker, postId } = req.body;
+
+    if (!liker || !postId) {
+      res.status(400).json({
+        error: "Liker and post are required",
+      });
+    }
+
+    const newLike = await Like.find({ liker, post: postId });
+
+    if (!newLike) {
+      await Like.create({ liker, postId });
+    } else {
+      await Like.deleteOne({ liker, post: postId });
+    }
+
+    const likesCount = await Like.countDocuments({ post: postId });
+
+    res.json(likesCount);
+  }),
 ];
