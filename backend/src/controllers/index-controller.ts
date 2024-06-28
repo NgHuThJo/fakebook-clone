@@ -14,6 +14,10 @@ import { validateInput, validateEmail } from "../services/validation-chains.js";
 
 const logger = debug("chat-app:indexController");
 const saltLength = 10;
+enum Role {
+  Guest = "GUEST",
+  Admin = "ADMIN",
+}
 
 export const postSignup = [
   validateEmail("email"),
@@ -69,6 +73,39 @@ export const postSignup = [
 
 export const postLogin = [
   asyncHandler(async (req, res, next) => {
+    const role: Role = req.body.role;
+
+    if (role === Role.Guest) {
+      const guest = await User.findOne({ email: "guestemail@gmail.com" });
+
+      if (!guest) {
+        const guest = new User({
+          username: "Guestname",
+          email: "guestemail@gmail.com",
+          password: "somerandompassword",
+          avatarUrl: faker.image.avatar(),
+          isVerified: true,
+        });
+
+        await guest.save();
+      }
+
+      const token = jwt.sign({ guest }, process.env.JWT_SECRET);
+
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60,
+      });
+
+      res.json({
+        message: "Guest successfully logged in",
+      });
+
+      return;
+    }
+
     const user = await User.findOne({
       email: req.body.email,
     }).exec();
@@ -99,9 +136,12 @@ export const postLogin = [
       return;
     }
 
-    const token = jwt.sign({ user: user }, process.env.JWT_SECRET);
+    const token = jwt.sign({ user }, process.env.JWT_SECRET);
 
     res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
       maxAge: 1000 * 60 * 60,
     });
 

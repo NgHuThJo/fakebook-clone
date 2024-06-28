@@ -1,13 +1,21 @@
 // Third party
-import { Form, Link, json, redirect, useActionData } from "react-router-dom";
+import {
+  Form,
+  Link,
+  json,
+  redirect,
+  useActionData,
+  useNavigate,
+} from "react-router-dom";
 // Custom hooks
 import { useDisclosure } from "@/hooks/useDisclosure";
 // Api
 import { loginUser } from "../../api/login";
 // Utility
 import { convertFormDataToObject } from "@/utils/object";
+import { handleError } from "@/utils/error";
 // Types
-import { ApiClient } from "@/lib/apiClient";
+import { ApiClient, apiClient } from "@/lib/apiClient";
 import { AuthErrors } from "../../routes/auth-route";
 // Styles
 import styles from "./login.module.css";
@@ -29,6 +37,29 @@ export const loginAction = async (formData: FormData, apiClient: ApiClient) => {
 export function Login() {
   const { isOpen, close, toggle } = useDisclosure();
   const action = useActionData() as AuthErrors;
+  const navigate = useNavigate();
+
+  const handleGuestLogin = async () => {
+    try {
+      const response = await apiClient.post("/login", {
+        role: "GUEST",
+      });
+
+      console.log(response.message);
+
+      if (!response?.message) {
+        throw new Error("Guest login failed");
+      }
+
+      navigate("/profile");
+    } catch (error) {
+      handleError(
+        error as Error,
+        "Login",
+        "Guest login failed. Please try again."
+      );
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -61,7 +92,9 @@ export function Login() {
           <Link to="/">Create a Page</Link> for a celebrity, brand or business.
         </p>
         <p>
-          <Link to="/profile">Or continue as guest.</Link>
+          <button className={styles["guest-button"]} onClick={handleGuestLogin}>
+            Or continue as guest.
+          </button>
         </p>
       </div>
       {isOpen && <Signup close={close} />}

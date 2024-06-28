@@ -1,4 +1,5 @@
 import express from "express";
+import { verifyJWT } from "@/services/jwt.js";
 import * as profileController from "@/controllers/profile-controller.js";
 
 const router = express.Router();
