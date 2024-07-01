@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import request from "supertest";
 import { vi } from "vitest";
 // Collections
-import { Feed, Post, User } from "@/models/index.js";
+import { Feed, Like, Post, User } from "@/models/index.js";
 // Router
 import profileRouter from "./profile.js";
 import {
@@ -17,6 +17,20 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  req.user = {
+    _id: new mongoose.Types.ObjectId(),
+    username: "Guestname",
+    email: "guestemail@gmail.com",
+    password: "somerandompassword",
+    avatarUrl: "somerandomurl",
+    isVerified: true,
+  };
+
+  // console.log("req.user:", req.user);
+
+  next();
+});
 app.use("/", profileRouter);
 
 const setupData = async () => {
@@ -37,12 +51,19 @@ const setupData = async () => {
   const feeds = Array.from({ length: feedCount }, (feed, index) =>
     generateFeed(postIds[index])
   );
+
   await Feed.insertMany(feeds);
+
+  return { userIds, postIds };
 };
 
-describe("get /users", () => {
-  beforeAll(setupData);
+let ids = {};
 
+beforeAll(async () => {
+  ids = await setupData();
+});
+
+describe("get /users", () => {
   it("should return 200 status with the user data", async () => {
     const res = await request(app).get("/users");
 
@@ -81,8 +102,31 @@ describe("get /feeds", () => {
   });
 });
 
-describe("post /feeds/:id", () => {
-  it("should return 200 status with updated like", async () => {
-    expect(true).toBeFalsy();
+describe("post /likes", () => {
+  it("should return 200 status with the new like count", async () => {
+    const res = await request(app).post("/likes").send({
+      postId: ids.postIds[0]._id,
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.body.likesCount).toBe(1);
+  });
+
+  it("should return 400 status when no postId is provided", async () => {
+    const res = await request(app).post("/likes").send({});
+
+    expect(res.status).toBe(400);
+  });
+
+  it("should return 500 status on database error", async () => {
+    const querySpy = vi.spyOn(Like, "find");
+
+    querySpy.mockRejectedValue(new Error("Database error"));
+
+    const res = await request(app).post("/likes").send({
+      postId: ids.postIds[0]._id,
+    });
+
+    expect(res.status).toBe(500);
   });
 });

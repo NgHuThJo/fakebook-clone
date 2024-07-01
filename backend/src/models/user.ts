@@ -1,13 +1,14 @@
-import { model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
 
-export type UserType = {
+export interface IUser extends Document {
   username: string;
   password: string;
   email: string;
   isVerified: boolean;
-};
+  avatarUrl: string;
+}
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<IUser>({
   username: {
     type: String,
     required: true,
@@ -30,4 +31,4 @@ const UserSchema = new Schema({
   avatarUrl: String,
 });
 
-export default model("User", UserSchema);
+export default model<IUser>("User", UserSchema);

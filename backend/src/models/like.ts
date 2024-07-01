@@ -1,6 +1,13 @@
-import { model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
+import { IPost } from "./post.js";
+import { IUser } from "./user.js";
 
-const LikeSchema = new Schema({
+export interface ILike extends Document {
+  liker: Schema.Types.ObjectId | IUser;
+  post: Schema.Types.ObjectId | IPost;
+}
+
+const LikeSchema = new Schema<ILike>({
   liker: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -11,4 +18,4 @@ const LikeSchema = new Schema({
   },
 });
 
-export default model("Like", LikeSchema);
+export default model<ILike>("Like", LikeSchema);

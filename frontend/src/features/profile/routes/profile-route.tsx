@@ -21,8 +21,6 @@ export const profileLoader = (apiClient: ApiClient) => async () => {
     getUsers(apiClient),
   ]);
 
-  console.log(feeds);
-
   return { feeds, users };
 };
 

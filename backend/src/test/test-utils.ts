@@ -1,5 +1,5 @@
 import bcryptjs from "bcryptjs";
-import { generateUser } from "./data-generator.js";
+import { generateUser } from "../utils/data-generator.js";
 import User from "@/models/user.js";
 
 export const createUser = async () => {

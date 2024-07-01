@@ -73,7 +73,7 @@ describe("post /login", () => {
     });
   });
 
-  it("should return 200 status with jwt token", async () => {
+  it("should return 200 status with message", async () => {
     const res = await request(app).post("/login").send({
       email: "john.doe@gmail.com",
       password: "password",
@@ -82,7 +82,6 @@ describe("post /login", () => {
     expect(res.status).toBe(200);
     expect(res.body).toMatchObject({
       message: expect.any(String),
-      token: expect.any(String),
     });
   });
 

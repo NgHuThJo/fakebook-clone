@@ -2,7 +2,7 @@
 import express from "express";
 // Models
 import "@/models";
-import { verifyJWT } from "@/services/jwt.js";
+import { verifyJWT } from "@/utils/jwt.js";
 // Routers
 import indexRouter from "./api/index/index.js";
 import profileRouter from "./api/profile/profile.js";

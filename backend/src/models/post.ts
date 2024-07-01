@@ -1,6 +1,16 @@
-import { get, model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
+import { IUser } from "./user.js";
 
-const PostSchema = new Schema({
+export interface IPost extends Document {
+  author: Schema.Types.ObjectId | IUser;
+  title: string;
+  post: string;
+  created: Date;
+  likesCount: number;
+  comments: Array<Schema.Types.ObjectId | IPost>;
+}
+
+const PostSchema = new Schema<IPost>({
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -20,7 +30,6 @@ const PostSchema = new Schema({
     type: Date,
     default: Date.now,
     immutable: true,
-    get: (date: Date) => date.toLocaleDateString("en-US"),
   },
   likesCount: {
     type: Number,
@@ -34,9 +43,13 @@ const PostSchema = new Schema({
   ],
 });
 
-PostSchema.set("toJSON", {
-  getters: true,
-  virtuals: false,
+PostSchema.virtual("formattedDate").get(function (this: IPost) {
+  return this.created.toLocaleDateString("en-US");
 });
 
-export default model("Post", PostSchema);
+PostSchema.set("toJSON", {
+  // getters: true,
+  virtuals: true,
+});
+
+export default model<IPost>("Post", PostSchema);

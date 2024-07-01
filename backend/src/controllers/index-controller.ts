@@ -1,74 +1,40 @@
 // Third party
 import asyncHandler from "express-async-handler";
 import bcryptjs from "bcryptjs";
-import crypto from "crypto";
 import debug from "debug";
+import { Request, Response } from "express";
 import { faker } from "@faker-js/faker";
 import jwt from "jsonwebtoken";
-import { validationResult } from "express-validator";
+import userService from "@/services/user-service.js";
 // Models
-import User, { UserType } from "../models/user.js";
-import Token from "../models/token.js";
-// Utility functions
-import { validateInput, validateEmail } from "../services/validation-chains.js";
+import User, { IUser } from "../models/user.js";
 
 const logger = debug("chat-app:indexController");
-const saltLength = 10;
 enum Role {
   Guest = "GUEST",
   Admin = "ADMIN",
 }
 
 export const postSignup = [
-  validateEmail("email"),
-  validateInput("username"),
-  validateInput("password"),
-  asyncHandler(async (req, res, next) => {
-    const errors = validationResult(req);
+  userService.validateUser(),
+  async (req: Request, res: Response) => {
+    try {
+      const { username, email, password, avatarUrl } = req.body;
 
-    if (!errors.isEmpty()) {
-      const errorsObject: Record<string, string> = {};
+      const result = await userService.signupUser(
+        username,
+        email,
+        password,
+        avatarUrl
+      );
 
-      errors.array().forEach((error) => {
-        if (error.type === "field") {
-          errorsObject[error.path] = error.msg;
-        }
-      });
-
+      res.status(201).json(result);
+    } catch (error) {
       res.status(400).json({
-        ...errorsObject,
+        general: (error as Error).message,
       });
-      return;
     }
-
-    const existingUser = await User.findOne({ email: req.body.email }).exec();
-
-    if (existingUser) {
-      res.status(400).send({
-        general:
-          "This email address is already in use. Please try another email address!",
-      });
-      return;
-    }
-
-    // const emailString = crypto.randomBytes(64).toString("hex");
-    const hashedPassword = await bcryptjs.hash(req.body.password, saltLength);
-    // isVerified is true for the sake of testing
-    const user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: hashedPassword,
-      avatarUrl: req.body?.avatarurl || faker.image.avatar(),
-      isVerified: true,
-    });
-
-    await user.save();
-
-    res.status(201).send({
-      // emailToken: emailString,
-      message: "User created successfully.",
-    });
-  }),
+  },
 ];
 
 export const postLogin = [

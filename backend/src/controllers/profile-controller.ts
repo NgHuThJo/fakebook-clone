@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import debug from "debug";
 import { Feed, Like, Post, User } from "@/models/index.js";
 import { RequestHandler } from "express";
+import post from "@/models/post.js";
 
 export const getUsers = [
   asyncHandler((req, res, next) => {
@@ -96,24 +97,26 @@ export const getFeeds: RequestHandler[] = [
 
 export const postLike = [
   asyncHandler(async (req, res, next) => {
-    const { liker, postId } = req.body;
+    const { postId } = req.body;
 
-    if (!liker || !postId) {
+    if (!postId) {
       res.status(400).json({
-        error: "Liker and post are required",
+        error: "Post is required",
       });
     }
 
-    const newLike = await Like.find({ liker, post: postId });
+    const newLike = await Like.find({ liker: req.user._id, post: postId });
 
-    if (!newLike) {
-      await Like.create({ liker, postId });
+    if (!newLike.length) {
+      await Like.create({ liker: req.user._id, post: postId });
     } else {
-      await Like.deleteOne({ liker, post: postId });
+      await Like.deleteOne({ liker: req.user._id, post: postId });
     }
 
     const likesCount = await Like.countDocuments({ post: postId });
 
-    res.json(likesCount);
+    res.json({
+      likesCount,
+    });
   }),
 ];
