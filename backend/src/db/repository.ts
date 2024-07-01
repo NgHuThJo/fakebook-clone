@@ -1,6 +1,7 @@
-import { Document, FilterQuery, Model, QueryOptions, Types } from "mongoose";
+import { Filter } from "http-proxy-middleware";
+import { Document, FilterQuery, Model } from "mongoose";
 
-export class Repository<T extends Document> {
+class Repository<T extends Document> {
   private model: Model<T>;
 
   constructor(model: Model<T>) {
@@ -34,4 +35,10 @@ export class Repository<T extends Document> {
   async find(item: FilterQuery<T>) {
     return await this.model.find(item);
   }
+
+  async findOne(item: FilterQuery<T>) {
+    return await this.model.findOne(item);
+  }
 }
+
+export default Repository;

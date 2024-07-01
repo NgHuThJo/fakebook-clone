@@ -1,13 +1,8 @@
 // Third party
 import asyncHandler from "express-async-handler";
-import bcryptjs from "bcryptjs";
 import debug from "debug";
-import { Request, Response } from "express";
-import { faker } from "@faker-js/faker";
 import jwt from "jsonwebtoken";
 import userService from "@/services/user-service.js";
-// Models
-import User, { IUser } from "../models/user.js";
 
 const logger = debug("chat-app:indexController");
 enum Role {
@@ -17,46 +12,26 @@ enum Role {
 
 export const postSignup = [
   userService.validateUser(),
-  async (req: Request, res: Response) => {
-    try {
-      const { username, email, password, avatarUrl } = req.body;
+  asyncHandler(async (req, res) => {
+    const { username, email, password, avatarUrl } = req.body;
+    const result = await userService.signupUser(
+      username,
+      email,
+      password,
+      avatarUrl
+    );
 
-      const result = await userService.signupUser(
-        username,
-        email,
-        password,
-        avatarUrl
-      );
-
-      res.status(201).json(result);
-    } catch (error) {
-      res.status(400).json({
-        general: (error as Error).message,
-      });
-    }
-  },
+    res.status(result.status).json(result.data);
+  }),
 ];
 
 export const postLogin = [
-  asyncHandler(async (req, res, next) => {
-    const role: Role = req.body.role;
+  asyncHandler(async (req, res) => {
+    const { email, password, role } = req.body;
 
     if (role === Role.Guest) {
-      const guest = await User.findOne({ email: "guestemail@gmail.com" });
-
-      if (!guest) {
-        const guest = new User({
-          username: "Guestname",
-          email: "guestemail@gmail.com",
-          password: "somerandompassword",
-          avatarUrl: faker.image.avatar(),
-          isVerified: true,
-        });
-
-        await guest.save();
-      }
-
-      const token = jwt.sign({ guest }, process.env.JWT_SECRET);
+      const guest = await userService.loginGuestUser();
+      const token = jwt.sign(guest.data, process.env.JWT_SECRET);
 
       res.cookie("jwt", token, {
         httpOnly: true,
@@ -64,45 +39,20 @@ export const postLogin = [
         sameSite: "strict",
         maxAge: 1000 * 60 * 60,
       });
-
       res.json({
         message: "Guest successfully logged in",
       });
-
       return;
     }
 
-    const user = await User.findOne({
-      email: req.body.email,
-    }).exec();
+    const response = await userService.loginUser(email, password);
 
-    if (!user) {
-      res.status(401).send({
-        email: `The email address "${req.body.email}" is not associated with any account. Please check and try again!`,
-      });
+    if (response.status >= 400) {
+      res.status(response.status).json(response.data);
       return;
     }
 
-    if (!user.isVerified) {
-      res.status(401).send({
-        general: "Your email has not been verified. Please check your emails!",
-      });
-      return;
-    }
-
-    const doesPasswordMatch = await bcryptjs.compare(
-      req.body.password,
-      user.password
-    );
-
-    if (!doesPasswordMatch) {
-      res
-        .status(401)
-        .send({ password: "Wrong password. Please check and try again!" });
-      return;
-    }
-
-    const token = jwt.sign({ user }, process.env.JWT_SECRET);
+    const token = jwt.sign(response.data, process.env.JWT_SECRET);
 
     res.cookie("jwt", token, {
       httpOnly: true,
@@ -110,9 +60,8 @@ export const postLogin = [
       sameSite: "strict",
       maxAge: 1000 * 60 * 60,
     });
-
-    res.status(200).send({
-      message: "User successfully logged in.",
+    res.status(response.status).send({
+      message: "User successfully logged in",
     });
   }),
 ];

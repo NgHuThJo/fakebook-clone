@@ -1,4 +1,4 @@
-import { Repository } from "./repository.js";
+import Repository from "./repository.js";
 import User, { IUser } from "@/models/user.js";
 
 class UserRepository extends Repository<IUser> {

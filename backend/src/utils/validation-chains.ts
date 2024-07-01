@@ -1,31 +1,25 @@
-import { NextFunction, Request, Response } from "express";
+import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 
 const fieldMinLength = 8;
 
-export function validateInput(formFieldName: string) {
-  return body(formFieldName)
+export const validateInput = (formFieldName: string) =>
+  body(formFieldName)
     .trim()
     .isLength({ min: fieldMinLength })
     .withMessage(
-      `${formFieldName} must have at least ${fieldMinLength} characters`
+      `Field "${formFieldName}" must have at least ${fieldMinLength} characters`
     )
     .escape();
-}
 
-export function validateEmail(emailFieldName: string) {
-  return body(emailFieldName)
+export const validateEmail = (emailFieldName: string) =>
+  body(emailFieldName)
     .trim()
     .isEmail()
     .withMessage("Invalid email address")
     .escape();
-}
 
-export function handleValidationErrors(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const handleValidationErrors = asyncHandler(async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -37,10 +31,11 @@ export function handleValidationErrors(
       }
     });
 
-    return res.status(400).json({
+    res.status(400).json({
       ...errorsObject,
     });
+    return;
   }
 
   next();
-}
+});
