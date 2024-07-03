@@ -6,7 +6,7 @@ import {
   generateFeed,
   generatePost,
   generateUser,
-} from "@/test/data-generator.js";
+} from "@/utils/data-generator.js";
 // Models
 import Feed from "@/models/feed.js";
 import User from "@/models/user.js";

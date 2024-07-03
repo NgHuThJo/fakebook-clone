@@ -3,6 +3,7 @@ import debug from "debug";
 import { Feed, Like, Post, User } from "@/models/index.js";
 import { RequestHandler } from "express";
 import post from "@/models/post.js";
+import like from "@/models/like.js";
 
 export const getUsers = [
   asyncHandler((req, res, next) => {
@@ -105,15 +106,20 @@ export const postLike = [
       });
     }
 
-    const newLike = await Like.find({ liker: req.user._id, post: postId });
+    const newLike = await Like.findOne({ liker: req.user._id, post: postId });
 
-    if (!newLike.length) {
+    if (!newLike) {
       await Like.create({ liker: req.user._id, post: postId });
     } else {
       await Like.deleteOne({ liker: req.user._id, post: postId });
     }
 
     const likesCount = await Like.countDocuments({ post: postId });
+    await Post.findByIdAndUpdate(postId, {
+      $set: {
+        likesCount,
+      },
+    });
 
     res.json({
       likesCount,

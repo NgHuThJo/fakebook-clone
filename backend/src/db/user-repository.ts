@@ -5,6 +5,10 @@ class UserRepository extends Repository<IUser> {
   constructor() {
     super(User);
   }
+
+  findByEmail(email: string) {
+    return this.findOne({ email });
+  }
 }
 
 export default new UserRepository();

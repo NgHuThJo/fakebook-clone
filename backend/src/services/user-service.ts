@@ -21,7 +21,7 @@ class UserService {
     if (existingUser) {
       return {
         status: 400,
-        data: {
+        message: {
           general: "Email address is already in use",
         },
       };
@@ -30,7 +30,7 @@ class UserService {
     // const emailString = crypto.randomBytes(64).toString("hex");
     const hashedPassword = await bcryptjs.hash(password, saltLength);
     // isVerified is true for the sake of testing
-    await userRepository.create({
+    const newUser = await userRepository.create({
       username: username,
       email: email,
       password: hashedPassword,
@@ -40,9 +40,7 @@ class UserService {
 
     return {
       status: 200,
-      data: {
-        message: "User created successfully",
-      },
+      data: newUser,
     };
   }
 
@@ -54,7 +52,7 @@ class UserService {
     if (!user) {
       return {
         status: 401,
-        data: {
+        message: {
           email: `Email address "${email}" is not associated with any account`,
         },
       };
@@ -63,7 +61,7 @@ class UserService {
     if (!user.isVerified) {
       return {
         status: 401,
-        data: {
+        message: {
           general: "Email address is not verified",
         },
       };
@@ -74,7 +72,7 @@ class UserService {
     if (!doesPasswordMatch) {
       return {
         status: 401,
-        data: {
+        message: {
           password: "Wrong password",
         },
       };
@@ -101,7 +99,7 @@ class UserService {
 
     return {
       status: 200,
-      data: guest,
+      data: guest.toJSON(),
     };
   }
 

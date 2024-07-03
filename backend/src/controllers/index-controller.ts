@@ -11,7 +11,7 @@ enum Role {
 }
 
 export const postSignup = [
-  userService.validateUser(),
+  ...userService.validateUser(),
   asyncHandler(async (req, res) => {
     const { username, email, password, avatarUrl } = req.body;
     const result = await userService.signupUser(
@@ -21,7 +21,9 @@ export const postSignup = [
       avatarUrl
     );
 
-    res.status(result.status).json(result.data);
+    res.status(result.status).json({
+      message: "Signup successful",
+    });
   }),
 ];
 
@@ -30,8 +32,9 @@ export const postLogin = [
     const { email, password, role } = req.body;
 
     if (role === Role.Guest) {
-      const guest = await userService.loginGuestUser();
-      const token = jwt.sign(guest.data, process.env.JWT_SECRET);
+      const response = await userService.loginGuestUser();
+
+      const token = jwt.sign(response.data, process.env.JWT_SECRET);
 
       res.cookie("jwt", token, {
         httpOnly: true,
@@ -39,8 +42,8 @@ export const postLogin = [
         sameSite: "strict",
         maxAge: 1000 * 60 * 60,
       });
-      res.json({
-        message: "Guest successfully logged in",
+      res.status(response.status).json({
+        message: "Guest login successful",
       });
       return;
     }
@@ -48,7 +51,7 @@ export const postLogin = [
     const response = await userService.loginUser(email, password);
 
     if (response.status >= 400) {
-      res.status(response.status).json(response.data);
+      res.status(response.status).json(response.message);
       return;
     }
 

@@ -1,4 +1,3 @@
-import { Filter } from "http-proxy-middleware";
 import { Document, FilterQuery, Model } from "mongoose";
 
 class Repository<T extends Document> {
