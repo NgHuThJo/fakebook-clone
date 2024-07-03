@@ -7,36 +7,52 @@ class Repository<T extends Document> {
     this.model = model;
   }
 
+  async aggregate(pipeline: any[]) {
+    return await this.model.aggregate(pipeline);
+  }
+
   async create(item: Partial<T>) {
     return await this.model.create(item);
   }
 
-  async findById(id: string) {
-    return await this.model.findById(id);
+  async deleteAll() {
+    return await this.model.deleteMany();
+  }
+
+  async deleteById(id: string) {
+    return await this.model.findByIdAndDelete(id);
+  }
+
+  async deleteOne(filter: FilterQuery<T>) {
+    return await this.model.deleteOne(filter);
+  }
+
+  async find(filter: FilterQuery<T>) {
+    return await this.model.find(filter);
   }
 
   async findAll() {
     return await this.model.find();
   }
 
-  async update(id: string, item: Partial<T>, isNew = true) {
+  async findById(id: string) {
+    return await this.model.findById(id);
+  }
+
+  async findOne(filter: FilterQuery<T>) {
+    return await this.model.findOne(filter);
+  }
+
+  async update(item: Partial<T>, filter?: FilterQuery<T>, isNew = true) {
+    return await this.model.updateMany(filter, item, { new: isNew });
+  }
+
+  async updateById(id: string, item: Partial<T>, isNew = true) {
     return await this.model.findByIdAndUpdate(id, item, { new: isNew });
   }
 
-  async delete(id: string) {
-    return await this.model.findByIdAndDelete(id);
-  }
-
-  async aggregate(pipeline: any[]) {
-    return await this.model.aggregate(pipeline);
-  }
-
-  async find(item: FilterQuery<T>) {
-    return await this.model.find(item);
-  }
-
-  async findOne(item: FilterQuery<T>) {
-    return await this.model.findOne(item);
+  async updateOne(item: Partial<T>, filter?: FilterQuery<T>, isNew = true) {
+    return await this.model.updateOne(filter, item, { new: isNew });
   }
 }
 
