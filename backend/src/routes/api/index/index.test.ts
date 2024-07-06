@@ -2,7 +2,7 @@
 import express from "express";
 import request from "supertest";
 // Collections
-import User from "@/models/user.js";
+import userRepository from "@/db/user-repository.js";
 // Router
 import indexRouter from "./index.js";
 
@@ -25,7 +25,7 @@ describe("post /signup", () => {
       message: expect.any(String),
     });
 
-    const user = await User.findOne({ email: "john.doe@gmail.com" });
+    const user = await userRepository.findOne({ email: "john.doe@gmail.com" });
     expect(user).toHaveProperty("email");
   });
 

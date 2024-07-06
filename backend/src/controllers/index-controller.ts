@@ -21,9 +21,7 @@ export const postSignup = [
       avatarUrl
     );
 
-    res.status(result.status).json({
-      message: "Signup successful",
-    });
+    res.status(result.status).json(result.message);
   }),
 ];
 
@@ -55,7 +53,7 @@ export const postLogin = [
       return;
     }
 
-    const token = jwt.sign(response.data, process.env.JWT_SECRET);
+    const token = jwt.sign(response.data?.toJSON(), process.env.JWT_SECRET);
 
     res.cookie("jwt", token, {
       httpOnly: true,
@@ -63,8 +61,6 @@ export const postLogin = [
       sameSite: "strict",
       maxAge: 1000 * 60 * 60,
     });
-    res.status(response.status).send({
-      message: "User successfully logged in",
-    });
+    res.status(response.status).send(response.message);
   }),
 ];

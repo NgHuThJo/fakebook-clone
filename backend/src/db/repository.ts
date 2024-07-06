@@ -8,51 +8,51 @@ class Repository<T extends Document> {
   }
 
   async aggregate(pipeline: any[]) {
-    return await this.model.aggregate(pipeline);
+    return this.model.aggregate(pipeline);
   }
 
   async create(item: Partial<T>) {
-    return await this.model.create(item);
+    return this.model.create(item);
   }
 
   async deleteAll() {
-    return await this.model.deleteMany();
+    return this.model.deleteMany();
   }
 
   async deleteById(id: string) {
-    return await this.model.findByIdAndDelete(id);
+    return this.model.findByIdAndDelete(id);
   }
 
   async deleteOne(filter: FilterQuery<T>) {
-    return await this.model.deleteOne(filter);
+    return this.model.deleteOne(filter);
   }
 
-  async find(filter: FilterQuery<T>) {
-    return await this.model.find(filter);
+  async find(filter: FilterQuery<T>, projection?: string) {
+    return this.model.find(filter, projection);
   }
 
-  async findAll() {
-    return await this.model.find();
+  async findAll(projection?: string) {
+    return this.model.find({}, projection);
   }
 
-  async findById(id: string) {
-    return await this.model.findById(id);
+  async findById(id: string, projection?: string) {
+    return this.model.findById(id, projection);
   }
 
-  async findOne(filter: FilterQuery<T>) {
-    return await this.model.findOne(filter);
+  async findOne(filter: FilterQuery<T>, projection?: string) {
+    return this.model.findOne(filter, projection);
   }
 
   async update(item: Partial<T>, filter?: FilterQuery<T>, isNew = true) {
-    return await this.model.updateMany(filter, item, { new: isNew });
+    return this.model.updateMany(filter, item, { new: isNew });
   }
 
-  async updateById(id: string, item: Partial<T>, isNew = true) {
-    return await this.model.findByIdAndUpdate(id, item, { new: isNew });
+  async updateById(id: string, filter?: FilterQuery<T>, isNew = true) {
+    return this.model.findByIdAndUpdate(id, filter, { new: isNew });
   }
 
   async updateOne(item: Partial<T>, filter?: FilterQuery<T>, isNew = true) {
-    return await this.model.updateOne(filter, item, { new: isNew });
+    return this.model.updateOne(filter, item, { new: isNew });
   }
 }
 

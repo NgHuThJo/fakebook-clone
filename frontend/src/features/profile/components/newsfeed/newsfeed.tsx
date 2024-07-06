@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Image } from "@/components/ui/image";
 import { apiClient } from "@/lib/apiClient";
@@ -33,12 +33,17 @@ export function Newsfeed({ feedData }: NewsfeedProps) {
   const [data, setData] = useState(feedData);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  console.log(data);
+  // console.log(data);
 
-  const handleLikes = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-    postId: string
-  ) => {
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  const handleLikes = async (postId: string) => {
     try {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
@@ -54,16 +59,18 @@ export function Newsfeed({ feedData }: NewsfeedProps) {
         }
       );
 
-      setData((prevData) =>
-        prevData.map((data) =>
-          data.post._id === postId
-            ? {
-                ...data,
-                post: { ...data.post, likesCount: res.likesCount },
-              }
-            : data
-        )
-      );
+      if (res) {
+        setData((prevData) =>
+          prevData.map((data) =>
+            data.post._id === postId
+              ? {
+                  ...data,
+                  post: { ...data.post, likesCount: res.likesCount },
+                }
+              : data
+          )
+        );
+      }
     } catch (error) {
       console.error("Error updating likes:", (error as Error).message);
     }
@@ -81,8 +88,8 @@ export function Newsfeed({ feedData }: NewsfeedProps) {
             <p>Created: {feed.post.created}</p>
             <button
               className={styles.likes}
-              onClick={(event) => {
-                handleLikes(event, feed.post._id);
+              onClick={() => {
+                handleLikes(feed.post._id);
               }}
             >
               <Image className="icon" src={thumbs_up_icon}></Image>

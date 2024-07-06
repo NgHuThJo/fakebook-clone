@@ -10,6 +10,24 @@ import {
 const saltLength = 10;
 
 class UserService {
+  async getUsers() {
+    const users = await userRepository.findAll("username email avatarUrl");
+
+    if (!users.length) {
+      return {
+        status: 400,
+        message: {
+          error: "No user found",
+        },
+      };
+    }
+
+    return {
+      status: 200,
+      data: users,
+    };
+  }
+
   async signupUser(
     username: string,
     email: string,
@@ -18,7 +36,7 @@ class UserService {
   ) {
     const existingUser = await userRepository.find({ email });
 
-    if (existingUser) {
+    if (existingUser.length) {
       return {
         status: 400,
         message: {
@@ -39,8 +57,10 @@ class UserService {
     });
 
     return {
-      status: 200,
-      data: newUser,
+      status: 201,
+      message: {
+        message: "Signup successful",
+      },
     };
   }
 
@@ -81,6 +101,9 @@ class UserService {
     return {
       status: 200,
       data: user,
+      message: {
+        message: "User login successful",
+      },
     };
   }
 

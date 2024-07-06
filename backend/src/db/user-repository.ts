@@ -1,9 +1,9 @@
 import Repository from "./repository.js";
-import User, { IUser } from "@/models/user.js";
+import user, { IUser } from "@/models/user.js";
 
 class UserRepository extends Repository<IUser> {
   constructor() {
-    super(User);
+    super(user);
   }
 }
 

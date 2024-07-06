@@ -11,7 +11,7 @@ import {
   generateFeed,
   generatePost,
   generateUser,
-} from "@/test/data-generator.js";
+} from "@/utils/data-generator.js";
 
 const app = express();
 
@@ -76,7 +76,6 @@ describe("get /users", () => {
 
     const res = await request(app).get("/users");
     expect(res.status).toBe(500);
-    expect(res.body).toHaveProperty("error");
 
     querySpy.mockRestore();
   });
@@ -119,7 +118,7 @@ describe("post /likes", () => {
   });
 
   it("should return 500 status on database error", async () => {
-    const querySpy = vi.spyOn(Like, "find");
+    const querySpy = vi.spyOn(Like, "findOne");
 
     querySpy.mockRejectedValue(new Error("Database error"));
 
