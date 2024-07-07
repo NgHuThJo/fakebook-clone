@@ -1,9 +1,6 @@
 import asyncHandler from "express-async-handler";
 import debug from "debug";
-import { Feed, Like, Post, User } from "@/models/index.js";
 import { RequestHandler } from "express";
-import post from "@/models/post.js";
-import like from "@/models/like.js";
 import userService from "@/services/user-service.js";
 import profileService from "@/services/profile-service.js";
 
@@ -53,5 +50,19 @@ export const postLike = [
     res.json({
       likesCount,
     });
+  }),
+];
+
+export const postFriendshipRequest = [
+  asyncHandler(async (req, res, next) => {
+    const { receiverId } = req.body;
+    const { user } = req;
+
+    const response = await profileService.createFriendship(
+      user._id,
+      receiverId
+    );
+
+    res.status(response.status).json(response.message);
   }),
 ];

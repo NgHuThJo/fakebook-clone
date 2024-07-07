@@ -21,6 +21,8 @@ export const profileLoader = (apiClient: ApiClient) => async () => {
     getUsers(apiClient),
   ]);
 
+  console.log(feeds, users);
+
   return { feeds, users };
 };
 
@@ -37,8 +39,12 @@ export function ProfileRoute() {
       <Navigation onChange={handleSearch} />
       <main className={styles.main}>
         <Sidebar />
-        <Newsfeed feedData={loaderData.feeds} />
-        <Userlist userData={loaderData.users} />
+        {loaderData && (
+          <>
+            <Newsfeed feedData={loaderData.feeds} />
+            <Userlist userData={loaderData.users} />
+          </>
+        )}
       </main>
     </>
   );

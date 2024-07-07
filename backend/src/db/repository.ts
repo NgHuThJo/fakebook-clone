@@ -11,7 +11,7 @@ class Repository<T extends Document> {
     return this.model.aggregate(pipeline);
   }
 
-  async create(item: Partial<T>) {
+  async create(item: T) {
     return this.model.create(item);
   }
 

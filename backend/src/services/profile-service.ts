@@ -1,6 +1,8 @@
 import feedRepository from "@/db/feed-repository.js";
+import friendshipRepository from "@/db/friendship-repository.js";
 import likeRepository from "@/db/like-repository.js";
 import postRepository from "@/db/post-repository.js";
+import friendship from "@/models/friendship.js";
 import mongoose from "mongoose";
 
 const feedPipeline = [
@@ -100,6 +102,34 @@ class ProfileService {
     });
 
     return likesCount;
+  }
+
+  async createFriendship(senderId: string, receiverId: string) {
+    const friendship = await friendshipRepository.findOne({
+      sender: senderId,
+      receiver: receiverId,
+    });
+
+    if (friendship) {
+      return {
+        status: 400,
+        message: {
+          error: "Friend request already sent",
+        },
+      };
+    }
+
+    const newFriendship = await friendshipRepository.create({
+      sender: new mongoose.Types.ObjectId(senderId),
+      receiver: new mongoose.Types.ObjectId(receiverId),
+    });
+
+    return {
+      status: 200,
+      message: {
+        message: "Friendship request sent successfully",
+      },
+    };
   }
 }
 

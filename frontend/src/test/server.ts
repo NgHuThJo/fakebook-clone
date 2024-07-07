@@ -16,7 +16,17 @@ export const handlers = [
   http.get("/api/profile/feeds", () => {
     return HttpResponse.json([
       {
-        imgUrl: "randomString",
+        post: {
+          author: {
+            username: "username",
+            email: "email",
+          },
+          post: "randomPost",
+          title: "randomTitle",
+          likesCount: 0,
+          created: Date.now(),
+        },
+        imgUrl: "randomUrl",
       },
     ]);
   }),
@@ -24,6 +34,8 @@ export const handlers = [
     return HttpResponse.json([
       {
         username: "John Doe",
+        email: "randomEmail@gmail.com",
+        avatarUrl: "randomUrl",
       },
     ]);
   }),
