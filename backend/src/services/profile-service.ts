@@ -3,6 +3,7 @@ import friendshipRepository from "@/db/friendship-repository.js";
 import likeRepository from "@/db/like-repository.js";
 import postRepository from "@/db/post-repository.js";
 import friendship from "@/models/friendship.js";
+import { loggerPlugin } from "http-proxy-middleware";
 import mongoose from "mongoose";
 
 const feedPipeline = [
@@ -114,12 +115,12 @@ class ProfileService {
       return {
         status: 400,
         message: {
-          error: "Friend request already sent",
+          message: "Friend request already sent",
         },
       };
     }
 
-    const newFriendship = await friendshipRepository.create({
+    await friendshipRepository.create({
       sender: new mongoose.Types.ObjectId(senderId),
       receiver: new mongoose.Types.ObjectId(receiverId),
     });
@@ -129,6 +130,20 @@ class ProfileService {
       message: {
         message: "Friendship request sent successfully",
       },
+    };
+  }
+
+  async getFriendshipList(userId: string) {
+    const friendshipList = await friendshipRepository.find({
+      $and: [
+        { $or: [{ sender: userId }, { receiver: userId }] },
+        { status: "accepted" },
+      ],
+    });
+
+    return {
+      status: 200,
+      data: friendshipList,
     };
   }
 }

@@ -53,7 +53,7 @@ export const postLike = [
   }),
 ];
 
-export const postFriendshipRequest = [
+export const postFriendship = [
   asyncHandler(async (req, res, next) => {
     const { receiverId } = req.body;
     const { user } = req;
@@ -64,5 +64,15 @@ export const postFriendshipRequest = [
     );
 
     res.status(response.status).json(response.message);
+  }),
+];
+
+export const getFriendship = [
+  asyncHandler(async (req, res, next) => {
+    const { user } = req;
+
+    const response = await profileService.getFriendshipList(user._id);
+
+    res.status(response.status).json(response.data);
   }),
 ];

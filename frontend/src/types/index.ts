@@ -8,3 +8,11 @@ export type ClassName = {
 
 export type Overwrite<Base, Overrides> = Omit<Base, keyof Overrides> &
   Overrides;
+
+export type BaseEntity = {
+  _id: string;
+};
+
+export type Entity<T> = {
+  [K in keyof T]: T[K];
+} & BaseEntity;

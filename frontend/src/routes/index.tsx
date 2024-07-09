@@ -5,6 +5,7 @@ import { App } from "@/App";
 import { ErrorRoute } from "./error/ErrorRoute";
 // Loaders and actions
 import { profileLoader } from "@/features/profile/routes/profile-route";
+import { friendlistLoader } from "@/features/profile/components/friendlist/friendlist";
 import { authAction } from "@/features/auth/routes/auth-route";
 // Utility
 import { apiClient } from "@/lib/apiClient";
@@ -26,7 +27,7 @@ export const routesConfig = [
         action: authAction(apiClient),
       },
       {
-        path: "/profile",
+        path: "profile",
         lazy: async () => {
           const { ProfileRoute } = await import(
             "@/features/profile/routes/profile-route"
@@ -35,6 +36,17 @@ export const routesConfig = [
           return { Component: ProfileRoute };
         },
         loader: profileLoader(apiClient),
+      },
+      {
+        path: "friends",
+        lazy: async () => {
+          const { Friendlist } = await import(
+            "@/features/profile/components/friendlist/friendlist"
+          );
+
+          return { Component: Friendlist };
+        },
+        loader: friendlistLoader(apiClient),
       },
     ],
   },

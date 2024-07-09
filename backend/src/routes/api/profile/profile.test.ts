@@ -15,19 +15,19 @@ import {
 
 const app = express();
 
+const objectId = new mongoose.Types.ObjectId();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   req.user = {
-    _id: new mongoose.Types.ObjectId(),
+    _id: objectId,
     username: "Guestname",
     email: "guestemail@gmail.com",
     password: "somerandompassword",
     avatarUrl: "somerandomurl",
     isVerified: true,
   };
-
-  // console.log("req.user:", req.user);
 
   next();
 });
@@ -127,5 +127,37 @@ describe("post /likes", () => {
     });
 
     expect(res.status).toBe(500);
+  });
+});
+
+describe("post /friendship", () => {
+  it("should return 200 status after creating friendship request", async () => {
+    const res = await request(app).post("/friendship").send({
+      receiverId: ids.userIds[0]._id,
+    });
+
+    expect(res.status).toBe(200);
+  });
+
+  it("should not allow duplicate friendship requests", async () => {
+    let res = await request(app).post("/friendship").send({
+      receiverId: ids.userIds[0]._id,
+    });
+
+    res = await request(app).post("/friendship").send({
+      receiverId: ids.userIds[0]._id,
+    });
+
+    expect(res.status).toBe(400);
+  });
+});
+
+describe("get /friendship", () => {
+  it("should return 200 status after getting the friendship list", async () => {
+    const res = await request(app).get("/friendship");
+
+    console.log(res.body);
+
+    expect(res.status).toBe(200);
   });
 });
