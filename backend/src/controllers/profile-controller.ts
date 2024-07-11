@@ -71,6 +71,8 @@ export const getFriendship = [
   asyncHandler(async (req, res, next) => {
     const { user } = req;
 
+    console.log("Friendship user", user);
+
     const response = await profileService.getFriendshipList(user._id);
 
     res.status(response.status).json(response.data);

@@ -17,7 +17,7 @@ const sidebarArray = [
   },
   {
     img: friends_icon,
-    to: "/friends",
+    to: "friends",
     label: "Friends",
   },
   {

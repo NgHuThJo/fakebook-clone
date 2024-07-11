@@ -27,24 +27,24 @@ export function Navigation({ onChange }: NavigationProps) {
         <SearchBar placeholder="Search" onChange={onChange}></SearchBar>
       </div>
       <div data-center>
-        <Link to="/" replace>
+        <Link to="/profile" replace>
           <Image className="icon" src={home_icon}></Image>
         </Link>
-        <Link to="/" replace>
+        <Link to="/profile" replace>
           <Image className="icon" src={subscription_icon}></Image>
         </Link>
-        <Link to="/" replace>
+        <Link to="/profile" replace>
           <Image className="icon" src={storefront_icon}></Image>
         </Link>
-        <Link to="/" replace>
+        <Link to="/profile" replace>
           <Image className="icon" src={group_icon}></Image>
         </Link>
       </div>
       <div data-end>
-        <Link to="/" replace>
+        <Link to="/profile" replace>
           <Image className="icon" src={add_icon}></Image>
         </Link>
-        <Link to="/" replace>
+        <Link to="/profile" replace>
           <Image className="icon" src={notification_icon}></Image>
         </Link>
         <Link to="/" replace>

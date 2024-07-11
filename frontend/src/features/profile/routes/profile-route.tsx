@@ -1,8 +1,6 @@
 // Third party
-import { ChangeEvent, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 // Components
-import { Navigation } from "@/features/shared/navigation/navigation";
 import { Newsfeed } from "../components/newsfeed/newsfeed";
 import { Sidebar } from "../components/sidebar/sidebar";
 import { Userlist } from "../components/userlist/userlist";
@@ -27,16 +25,10 @@ export const profileLoader = (apiClient: ApiClient) => async () => {
 };
 
 export function ProfileRoute() {
-  const [searchQuery, setSearchQuery] = useState("");
   const loaderData = useLoaderData() as Record<ObjectKey, any>;
-
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.currentTarget.value);
-  };
 
   return (
     <>
-      <Navigation onChange={handleSearch} />
       <main className={styles.main}>
         <Sidebar />
         {loaderData && (

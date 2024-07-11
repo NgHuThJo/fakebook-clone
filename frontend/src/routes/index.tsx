@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 // Routes
 import { App } from "@/App";
 import { ErrorRoute } from "./error/ErrorRoute";
+import { ProfileLayoutRoute } from "@/features/profile/routes/layout/profile-layout-route";
 // Loaders and actions
 import { profileLoader } from "@/features/profile/routes/profile-route";
 import { friendlistLoader } from "@/features/profile/components/friendlist/friendlist";
@@ -12,11 +13,12 @@ import { apiClient } from "@/lib/apiClient";
 
 export const routesConfig = [
   {
+    path: "/",
     element: <App />,
     errorElement: <ErrorRoute />,
     children: [
       {
-        path: "/",
+        index: true,
         lazy: async () => {
           const { AuthRoute } = await import(
             "@/features/auth/routes/auth-route"
@@ -28,25 +30,31 @@ export const routesConfig = [
       },
       {
         path: "profile",
-        lazy: async () => {
-          const { ProfileRoute } = await import(
-            "@/features/profile/routes/profile-route"
-          );
+        element: <ProfileLayoutRoute />,
+        children: [
+          {
+            index: true,
+            lazy: async () => {
+              const { ProfileRoute } = await import(
+                "@/features/profile/routes/profile-route"
+              );
 
-          return { Component: ProfileRoute };
-        },
-        loader: profileLoader(apiClient),
-      },
-      {
-        path: "friends",
-        lazy: async () => {
-          const { Friendlist } = await import(
-            "@/features/profile/components/friendlist/friendlist"
-          );
+              return { Component: ProfileRoute };
+            },
+            loader: profileLoader(apiClient),
+          },
+          {
+            path: "friends",
+            lazy: async () => {
+              const { Friendlist } = await import(
+                "@/features/profile/components/friendlist/friendlist"
+              );
 
-          return { Component: Friendlist };
-        },
-        loader: friendlistLoader(apiClient),
+              return { Component: Friendlist };
+            },
+            loader: friendlistLoader(apiClient),
+          },
+        ],
       },
     ],
   },

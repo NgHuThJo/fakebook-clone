@@ -1,5 +1,6 @@
-import { apiClient } from "@/lib/apiClient";
 import { Image } from "@/components/ui/image";
+import { apiClient } from "@/lib/apiClient";
+import { sendFriendRequest } from "../../api/friend";
 import styles from "./userlist.module.css";
 
 type UserData = {
@@ -14,7 +15,7 @@ type UserlistProps = React.PropsWithoutRef<{ userData: UserData[] }>;
 export function Userlist({ userData }: UserlistProps) {
   const handleClick = async (receiverId: string) => {
     try {
-      const response = await apiClient.post("/profile/friendship", {
+      const response = await sendFriendRequest(apiClient, {
         receiverId,
       });
 

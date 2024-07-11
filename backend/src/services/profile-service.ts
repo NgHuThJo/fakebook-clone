@@ -2,8 +2,6 @@ import feedRepository from "@/db/feed-repository.js";
 import friendshipRepository from "@/db/friendship-repository.js";
 import likeRepository from "@/db/like-repository.js";
 import postRepository from "@/db/post-repository.js";
-import friendship from "@/models/friendship.js";
-import { loggerPlugin } from "http-proxy-middleware";
 import mongoose from "mongoose";
 
 const feedPipeline = [
@@ -61,6 +59,73 @@ const feedPipeline = [
   },
 ];
 
+const friendshipPipeline = async (userId: string) => {
+  const friendList = await friendshipRepository.aggregate([
+    {
+      $match: {
+        $and: [
+          {
+            $or: [
+              { sender: new mongoose.Types.ObjectId(userId) },
+              { receiver: new mongoose.Types.ObjectId(userId) },
+            ],
+          },
+          {
+            status: { $ne: "rejected" },
+          },
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        let: { sender: "$sender", receiver: "$receiver" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $or: [
+                      { $eq: ["$_id", "$$sender"] },
+                      { $eq: ["$_id", "$$receiver"] },
+                    ],
+                  },
+                  {
+                    $ne: ["$_id", new mongoose.Types.ObjectId(userId)],
+                  },
+                ],
+              },
+            },
+          },
+          {
+            $project: {
+              username: 1,
+              email: 1,
+              avatarUrl: 1,
+            },
+          },
+        ],
+        as: "userDetails",
+      },
+    },
+    {
+      $unwind: "$userDetails",
+    },
+    {
+      $project: {
+        _id: 0,
+        status: 1,
+        friend: "$userDetails",
+      },
+    },
+  ]);
+
+  console.log("Friendlist", friendList);
+
+  return friendList;
+};
+
 class ProfileService {
   async getFeeds() {
     const feeds = await feedRepository.aggregate(feedPipeline);
@@ -106,6 +171,15 @@ class ProfileService {
   }
 
   async createFriendship(senderId: string, receiverId: string) {
+    if (senderId === receiverId) {
+      return {
+        status: 400,
+        message: {
+          message: "You can't send a friend request to yourself",
+        },
+      };
+    }
+
     const friendship = await friendshipRepository.findOne({
       sender: senderId,
       receiver: receiverId,
@@ -134,12 +208,9 @@ class ProfileService {
   }
 
   async getFriendshipList(userId: string) {
-    const friendshipList = await friendshipRepository.find({
-      $and: [
-        { $or: [{ sender: userId }, { receiver: userId }] },
-        { status: "accepted" },
-      ],
-    });
+    console.log("User id", userId);
+
+    const friendshipList = await friendshipPipeline(userId);
 
     return {
       status: 200,
