@@ -1,17 +1,50 @@
-import { ApiClient } from "@/lib/apiClient";
-import { getFriends } from "../../api/friend";
+import { apiClient, ApiClient } from "@/lib/apiClient";
+import { acceptFriendRequest, getFriends } from "../../api/friend";
 import { useLoaderData } from "react-router-dom";
+import styles from "./friendlist.module.css";
+
+type Friend = {
+  status: "pending" | "accepted";
+  friends: {
+    username: string;
+    email: string;
+    avatarUrl: string;
+  }[];
+};
 
 export const friendlistLoader = (apiClient: ApiClient) => async () => {
   const friendlist = await getFriends(apiClient);
 
-  return friendlist;
+  return { friendlist };
 };
 
 export function Friendlist() {
-  const loaderData = useLoaderData();
+  const { friendlist } = useLoaderData();
 
-  console.log(loaderData);
+  console.log("loader data friend", friendlist);
 
-  return <main></main>;
+  const handleAccept = async (senderId: string) => {
+    const response = await acceptFriendRequest(apiClient, { senderId });
+
+    console.log(response);
+  };
+
+  return (
+    <main>
+      {friendlist.map((item: Friend) => (
+        <ul className={styles.friend}>
+          <p>{item.status}</p>
+          {item.friends.map((friend, index) => (
+            <li>
+              <img src={friend.avatarUrl} alt="" />
+              <p>{friend.username}</p>
+              {item.status === "pending" && (
+                <button>Accept Friend Request</button>
+              )}
+            </li>
+          ))}
+        </ul>
+      ))}
+    </main>
+  );
 }

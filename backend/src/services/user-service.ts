@@ -1,6 +1,6 @@
 import bcryptjs from "bcryptjs";
 import { faker } from "@faker-js/faker";
-import userRepository from "@/db/user-repository.js";
+import user from "@/models/user.js";
 import {
   validateInput,
   validateEmail,
@@ -11,7 +11,7 @@ const saltLength = 10;
 
 class UserService {
   async getUsers() {
-    const users = await userRepository.findAll("username email avatarUrl");
+    const users = await user.find({}, "username email avatarUrl");
 
     if (!users.length) {
       return {
@@ -34,7 +34,7 @@ class UserService {
     password: string,
     avatarUrl?: string
   ) {
-    const existingUser = await userRepository.find({ email });
+    const existingUser = await user.find({ email });
 
     if (existingUser.length) {
       return {
@@ -48,7 +48,7 @@ class UserService {
     // const emailString = crypto.randomBytes(64).toString("hex");
     const hashedPassword = await bcryptjs.hash(password, saltLength);
     // isVerified is true for the sake of testing
-    const newUser = await userRepository.create({
+    const newUser = await user.create({
       username: username,
       email: email,
       password: hashedPassword,
@@ -65,11 +65,11 @@ class UserService {
   }
 
   async loginUser(email: string, password: string) {
-    const user = await userRepository.findOne({
+    const newUser = await user.findOne({
       email,
     });
 
-    if (!user) {
+    if (!newUser) {
       return {
         status: 401,
         message: {
@@ -78,7 +78,7 @@ class UserService {
       };
     }
 
-    if (!user.isVerified) {
+    if (!newUser.isVerified) {
       return {
         status: 401,
         message: {
@@ -87,7 +87,10 @@ class UserService {
       };
     }
 
-    const doesPasswordMatch = await bcryptjs.compare(password, user.password);
+    const doesPasswordMatch = await bcryptjs.compare(
+      password,
+      newUser.password
+    );
 
     if (!doesPasswordMatch) {
       return {
@@ -100,7 +103,7 @@ class UserService {
 
     return {
       status: 200,
-      data: user,
+      data: newUser,
       message: {
         message: "User login successful",
       },
@@ -108,10 +111,10 @@ class UserService {
   }
 
   async loginGuestUser() {
-    let guest = await userRepository.findOne({ email: "guestemail@gmail.com" });
+    let guest = await user.findOne({ email: "guestemail@gmail.com" });
 
     if (!guest) {
-      guest = await userRepository.create({
+      guest = await user.create({
         username: "Guest Name",
         email: "guestemail@gmail.com",
         password: "guestpassword",

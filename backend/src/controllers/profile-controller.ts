@@ -58,6 +58,8 @@ export const postFriendship = [
     const { receiverId } = req.body;
     const { user } = req;
 
+    console.log(receiverId, user);
+
     const response = await profileService.createFriendship(
       user._id,
       receiverId
@@ -71,10 +73,23 @@ export const getFriendship = [
   asyncHandler(async (req, res, next) => {
     const { user } = req;
 
-    console.log("Friendship user", user);
-
     const response = await profileService.getFriendshipList(user._id);
 
     res.status(response.status).json(response.data);
+  }),
+];
+export const acceptFriendRequest = [
+  asyncHandler(async (req, res, next) => {
+    const { senderId } = req.body;
+    const { user } = req;
+
+    const response = await profileService.acceptFriendRequest(
+      user._id,
+      senderId
+    );
+
+    console.log(response);
+
+    res.status(response.status).json(response.message);
   }),
 ];

@@ -2,7 +2,7 @@
 import express from "express";
 import request from "supertest";
 // Collections
-import userRepository from "@/db/user-repository.js";
+import user from "@/models/user.js";
 // Router
 import indexRouter from "./index.js";
 
@@ -25,8 +25,8 @@ describe("post /signup", () => {
       message: expect.any(String),
     });
 
-    const user = await userRepository.findOne({ email: "john.doe@gmail.com" });
-    expect(user).toHaveProperty("email");
+    const existingUser = await user.findOne({ email: "john.doe@gmail.com" });
+    expect(existingUser).toHaveProperty("email");
   });
 
   it("should return 400 status for missing fields", async () => {

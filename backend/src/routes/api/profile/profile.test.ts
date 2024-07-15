@@ -130,9 +130,9 @@ describe("post /likes", () => {
   });
 });
 
-describe("post /friendship", () => {
+describe("post /friends", () => {
   it("should return 200 status after creating friendship request", async () => {
-    const res = await request(app).post("/friendship").send({
+    const res = await request(app).post("/friends").send({
       receiverId: ids.userIds[0]._id,
     });
 
@@ -140,11 +140,11 @@ describe("post /friendship", () => {
   });
 
   it("should not allow duplicate friendship requests", async () => {
-    let res = await request(app).post("/friendship").send({
+    let res = await request(app).post("/friends").send({
       receiverId: ids.userIds[0]._id,
     });
 
-    res = await request(app).post("/friendship").send({
+    res = await request(app).post("/friends").send({
       receiverId: ids.userIds[0]._id,
     });
 
@@ -152,9 +152,9 @@ describe("post /friendship", () => {
   });
 });
 
-describe("get /friendship", () => {
+describe("get /friends", () => {
   it("should return 200 status after getting the friendship list", async () => {
-    const res = await request(app).get("/friendship");
+    const res = await request(app).get("/friends");
 
     console.log(res.body);
 

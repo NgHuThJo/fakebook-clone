@@ -1,7 +1,7 @@
-import feedRepository from "@/db/feed-repository.js";
-import friendshipRepository from "@/db/friendship-repository.js";
-import likeRepository from "@/db/like-repository.js";
-import postRepository from "@/db/post-repository.js";
+import feed from "@/models/feed.js";
+import friendship from "@/models/friendship.js";
+import like from "@/models/like.js";
+import post from "@/models/post.js";
 import mongoose from "mongoose";
 
 const feedPipeline = [
@@ -60,7 +60,7 @@ const feedPipeline = [
 ];
 
 const friendshipPipeline = async (userId: string) => {
-  const friendList = await friendshipRepository.aggregate([
+  const friendList = await friendship.aggregate([
     {
       $match: {
         $and: [
@@ -113,10 +113,16 @@ const friendshipPipeline = async (userId: string) => {
       $unwind: "$userDetails",
     },
     {
+      $group: {
+        _id: "$status",
+        friends: { $push: "$userDetails" },
+      },
+    },
+    {
       $project: {
         _id: 0,
-        status: 1,
-        friend: "$userDetails",
+        status: "$_id",
+        friends: 1,
       },
     },
   ]);
@@ -128,7 +134,7 @@ const friendshipPipeline = async (userId: string) => {
 
 class ProfileService {
   async getFeeds() {
-    const feeds = await feedRepository.aggregate(feedPipeline);
+    const feeds = await feed.aggregate(feedPipeline);
 
     if (feeds) {
       return {
@@ -146,22 +152,22 @@ class ProfileService {
   }
 
   async setLike(userId: string, postId: string) {
-    const newLike = await likeRepository.findOne({
+    const newLike = await like.findOne({
       liker: userId,
       post: postId,
     });
 
     if (!newLike) {
-      await likeRepository.create({
+      await like.create({
         liker: new mongoose.Types.ObjectId(userId),
         post: new mongoose.Types.ObjectId(postId),
       });
     } else {
-      await likeRepository.deleteOne({ liker: userId, post: postId });
+      await like.deleteOne({ liker: userId, post: postId });
     }
 
-    const likesCount = await likeRepository.countLikes(postId);
-    await postRepository.updateById(postId, {
+    const likesCount = await like.countDocuments({ post: postId });
+    await post.findByIdAndUpdate(postId, {
       $set: {
         likesCount,
       },
@@ -180,12 +186,12 @@ class ProfileService {
       };
     }
 
-    const friendship = await friendshipRepository.findOne({
+    const friendshipObject = await friendship.findOne({
       sender: senderId,
       receiver: receiverId,
     });
 
-    if (friendship) {
+    if (friendshipObject) {
       return {
         status: 400,
         message: {
@@ -194,7 +200,7 @@ class ProfileService {
       };
     }
 
-    await friendshipRepository.create({
+    await friendship.create({
       sender: new mongoose.Types.ObjectId(senderId),
       receiver: new mongoose.Types.ObjectId(receiverId),
     });
@@ -208,14 +214,18 @@ class ProfileService {
   }
 
   async getFriendshipList(userId: string) {
-    console.log("User id", userId);
-
     const friendshipList = await friendshipPipeline(userId);
 
     return {
       status: 200,
       data: friendshipList,
     };
+  }
+
+  async acceptFriendRequest(userId: string, senderId: string) {
+    console.log("User id", userId, "Sender id", senderId);
+
+    // await friendship.updateOne();
   }
 }
 
