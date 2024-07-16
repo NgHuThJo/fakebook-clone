@@ -83,6 +83,8 @@ export const acceptFriendRequest = [
     const { senderId } = req.body;
     const { user } = req;
 
+    console.log("User id", user._id, "Sender id", senderId);
+
     const response = await profileService.acceptFriendRequest(
       user._id,
       senderId

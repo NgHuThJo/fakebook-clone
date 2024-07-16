@@ -79,20 +79,33 @@ const friendshipPipeline = async (userId: string) => {
     {
       $lookup: {
         from: "users",
-        let: { sender: "$sender", receiver: "$receiver" },
+        let: { sender: "$sender", receiver: "$receiver", status: "$status" },
         pipeline: [
           {
             $match: {
               $expr: {
                 $and: [
+                  { $ne: ["$_id", new mongoose.Types.ObjectId(userId)] },
                   {
                     $or: [
-                      { $eq: ["$_id", "$$sender"] },
-                      { $eq: ["$_id", "$$receiver"] },
+                      {
+                        $and: [
+                          {
+                            $or: [
+                              { $eq: ["$_id", "$$sender"] },
+                              { $eq: ["$_id", "$$receiver"] },
+                            ],
+                          },
+                          { $eq: ["$$status", "accepted"] },
+                        ],
+                      },
+                      {
+                        $and: [
+                          { $eq: ["$_id", "$$sender"] },
+                          { $eq: ["$$status", "pending"] },
+                        ],
+                      },
                     ],
-                  },
-                  {
-                    $ne: ["$_id", new mongoose.Types.ObjectId(userId)],
                   },
                 ],
               },
@@ -223,9 +236,44 @@ class ProfileService {
   }
 
   async acceptFriendRequest(userId: string, senderId: string) {
-    console.log("User id", userId, "Sender id", senderId);
+    console.log(
+      await friendship.find({
+        sender: new mongoose.Types.ObjectId(senderId),
+        receiver: new mongoose.Types.ObjectId(userId),
+      })
+    );
 
-    // await friendship.updateOne();
+    const result = await friendship.updateOne(
+      {
+        sender: new mongoose.Types.ObjectId(senderId),
+        receiver: new mongoose.Types.ObjectId(userId),
+        status: "pending",
+      },
+      {
+        $set: {
+          status: "accepted",
+        },
+      }
+    );
+
+    console.log(await friendship.find());
+    console.log(result);
+
+    if (result.modifiedCount === 0) {
+      return {
+        status: 400,
+        message: {
+          message: "Friend request failed",
+        },
+      };
+    }
+
+    return {
+      status: 200,
+      message: {
+        message: "Friend request accepted",
+      },
+    };
   }
 }
 

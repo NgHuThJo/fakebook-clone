@@ -8,5 +8,6 @@ router.get("/feeds", profileController.getFeeds);
 router.post("/likes", profileController.postLike);
 router.get("/friends", profileController.getFriendship);
 router.post("/friends", profileController.postFriendship);
+router.post("/friends/accept", profileController.acceptFriendRequest);
 
 export default router;

@@ -6,6 +6,7 @@ import styles from "./friendlist.module.css";
 type Friend = {
   status: "pending" | "accepted";
   friends: {
+    _id: string;
     username: string;
     email: string;
     avatarUrl: string;
@@ -27,19 +28,23 @@ export function Friendlist() {
     const response = await acceptFriendRequest(apiClient, { senderId });
 
     console.log(response);
+
+    alert(response.message);
   };
 
   return (
     <main>
-      {friendlist.map((item: Friend) => (
-        <ul className={styles.friend}>
+      {friendlist.map((item: Friend, ulIndex: number) => (
+        <ul className={styles.friend} key={ulIndex}>
           <p>{item.status}</p>
-          {item.friends.map((friend, index) => (
-            <li>
+          {item.friends.map((friend, liIndex) => (
+            <li key={liIndex}>
               <img src={friend.avatarUrl} alt="" />
               <p>{friend.username}</p>
               {item.status === "pending" && (
-                <button>Accept Friend Request</button>
+                <button onClick={() => handleAccept(friend._id)}>
+                  Accept Friend Request
+                </button>
               )}
             </li>
           ))}
